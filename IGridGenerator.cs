@@ -10,6 +10,7 @@ namespace GameDesign
     public interface IGridGenerator
     {
         void CreateGrid(Form form, int rows, int columns);
+        bool HasGrid(Form form);
         void RemoveGrid(Form form);
     }
 }

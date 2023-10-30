@@ -11,6 +11,7 @@ namespace GameDesign
     public class GridGenerator : IGridGenerator
     {
         public Dictionary<int[,], string> Grid { get; set; }
+        public List<Control> existingPictureBoxes;
 
         public void CreateGrid(Form form, int rows, int columns)
         {
@@ -35,19 +36,24 @@ namespace GameDesign
             }
         }
 
-        public void RemoveGrid(Form form)
+        public bool HasGrid(Form form)
         {
-            List<Control> pictureBoxesToRemove = new List<Control>();
+            existingPictureBoxes = new List<Control>();
 
             foreach (Control control in form.Controls)
             {
                 if (control is PictureBox)
                 {
-                    pictureBoxesToRemove.Add(control);
+                    existingPictureBoxes.Add(control);
                 }
             }
 
-            foreach (Control pictureBox in pictureBoxesToRemove)
+            return !(existingPictureBoxes is null);
+        }
+
+        public void RemoveGrid(Form form)
+        {
+            foreach (Control pictureBox in existingPictureBoxes)
             {
                 form.Controls.Remove(pictureBox);
                 pictureBox.Dispose();

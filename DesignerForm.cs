@@ -36,14 +36,16 @@ namespace DKoQGame
         {
             if(int.TryParse(txtRow.Text, out int rows) && int.TryParse(txtColumn.Text, out int columns) && rows > 0 && columns > 0)
             {
-                gameDesign.RemoveGrid(this);
+                if (gameDesign.HasGrid(this))
+                {
+                    gameDesign.RemoveGrid(this);
+                }
                 gameDesign.CreateGrid(this, rows, columns);
             }
             else
             {
                 MessageBox.Show("Please provide valid data for rows and columns.(Both must be integers)\n" + "Input string was not in a correct format.", "QGame", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
     }
 }
