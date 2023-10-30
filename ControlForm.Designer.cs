@@ -36,9 +36,10 @@
             // btnDesign
             // 
             this.btnDesign.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDesign.Location = new System.Drawing.Point(66, 73);
+            this.btnDesign.Location = new System.Drawing.Point(50, 59);
+            this.btnDesign.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnDesign.Name = "btnDesign";
-            this.btnDesign.Size = new System.Drawing.Size(185, 73);
+            this.btnDesign.Size = new System.Drawing.Size(139, 59);
             this.btnDesign.TabIndex = 0;
             this.btnDesign.Text = "Design";
             this.btnDesign.UseVisualStyleBackColor = true;
@@ -47,9 +48,10 @@
             // btnPlay
             // 
             this.btnPlay.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPlay.Location = new System.Drawing.Point(338, 73);
+            this.btnPlay.Location = new System.Drawing.Point(254, 59);
+            this.btnPlay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(185, 73);
+            this.btnPlay.Size = new System.Drawing.Size(139, 59);
             this.btnPlay.TabIndex = 0;
             this.btnPlay.Text = "Play";
             this.btnPlay.UseVisualStyleBackColor = true;
@@ -58,9 +60,10 @@
             // btnExit
             // 
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(200, 190);
+            this.btnExit.Location = new System.Drawing.Point(150, 154);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(185, 73);
+            this.btnExit.Size = new System.Drawing.Size(139, 59);
             this.btnExit.TabIndex = 0;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -68,14 +71,15 @@
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(586, 320);
+            this.ClientSize = new System.Drawing.Size(440, 260);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.btnDesign);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "frmMain";
-            this.Text = "Dahyun Ko - QGame Control Panel";
+            this.Text = "QGame Control Panel - Dahyun Ko";
             this.ResumeLayout(false);
 
         }
