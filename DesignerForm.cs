@@ -34,7 +34,7 @@ namespace DKoQGame
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
-            if(int.TryParse(txtRow.Text, out int rows) && int.TryParse(txtColumn.Text, out int columns))
+            if(int.TryParse(txtRow.Text, out int rows) && int.TryParse(txtColumn.Text, out int columns) && rows > 0 && columns > 0)
             {
                 gameDesign.RemoveGrid(this);
                 gameDesign.CreateGrid(this, rows, columns);
