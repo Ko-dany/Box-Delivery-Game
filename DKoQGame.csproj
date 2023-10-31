@@ -58,8 +58,11 @@
     <Compile Include="DesignerForm.Designer.cs">
       <DependentUpon>DesignerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GridGenerator.cs" />
-    <Compile Include="IGridGenerator.cs" />
+    <Compile Include="GameManager.cs" />
+    <Compile Include="IGameManager.cs" />
+    <Compile Include="NewPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ControlForm.resx">

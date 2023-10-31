@@ -1,0 +1,78 @@
+﻿using DKoQGame;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace GameDesign
+{
+    public class GameManager : IGameManager
+    {
+        public NewPictureBox[,] Board { get; set; }
+        public int Rows { get; set; }
+        public int Columns { get; set; }
+        public string FileSaveInfo {  get; set; }
+        public string FileContent { get; set; }
+
+        public void InitializeBoard(int rows, int columns)
+        {
+            Board = new NewPictureBox[rows, columns];
+            Rows = rows; 
+            Columns = columns;
+        }
+
+        public void CreatePictureBoxData(int row, int column, NewPictureBox pictureBox)
+        {
+            Board[row, column] = pictureBox;
+        }
+
+        public void StoreDataToBoard(int row, int column, int tool)
+        {
+            Board[row, column].Tool = tool;
+        }
+
+        public void SaveFile()
+        {
+            int walls = 0, doors = 0, boxes = 0;
+
+            FileContent += $"{Rows}\n" + $"{Columns}\n";
+
+            for (int row=0; row < Rows; row++)
+            {
+                for(int col=0; col < Columns; col++)
+                {
+                    int tool = Board[row, col].Tool;
+
+                    FileContent += $"{row}\n"+ $"{col}\n"+ $"{tool}\n";
+
+                    switch (tool)
+                    {
+                        case 1:
+                            walls += 1;
+                            break;
+                        case 2:
+                        case 3:
+                            doors += 1;
+                            break;
+                        case 4:
+                        case 5:
+                            boxes += 1;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            FileSaveInfo = $"File saved successfully.\n"
+                +$"Total number of walls: {walls}\n"
+                + $"Total number of doors: {doors}\n"
+                + $"Total number of boxes: {boxes}\n";
+
+        }
+
+    }
+}

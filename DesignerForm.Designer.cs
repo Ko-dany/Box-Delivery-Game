@@ -36,17 +36,19 @@
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imlToolBox = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnNone = new System.Windows.Forms.Button();
-            this.btnWall = new System.Windows.Forms.Button();
+            this.btnGreenBox = new System.Windows.Forms.Button();
+            this.btnRedBox = new System.Windows.Forms.Button();
             this.btnGreenDoor = new System.Windows.Forms.Button();
             this.btnRedDoor = new System.Windows.Forms.Button();
-            this.btnRedBox = new System.Windows.Forms.Button();
-            this.btnGreenBox = new System.Windows.Forms.Button();
+            this.btnWall = new System.Windows.Forms.Button();
+            this.btnNone = new System.Windows.Forms.Button();
             this.lblColumn = new System.Windows.Forms.Label();
             this.txtRow = new System.Windows.Forms.TextBox();
             this.txtColumn = new System.Windows.Forms.TextBox();
             this.lblRow = new System.Windows.Forms.Label();
             this.btnGenerate = new System.Windows.Forms.Button();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.mnuDesigner.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -76,8 +78,9 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
@@ -106,38 +109,40 @@
             this.panel1.Controls.Add(this.btnWall);
             this.panel1.Controls.Add(this.btnNone);
             this.panel1.Location = new System.Drawing.Point(0, 111);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(267, 709);
             this.panel1.TabIndex = 8;
             // 
-            // btnNone
+            // btnGreenBox
             // 
-            this.btnNone.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnNone.ImageIndex = 0;
-            this.btnNone.ImageList = this.imlToolBox;
-            this.btnNone.Location = new System.Drawing.Point(47, 4);
-            this.btnNone.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.btnNone.Name = "btnNone";
-            this.btnNone.Size = new System.Drawing.Size(183, 84);
-            this.btnNone.TabIndex = 3;
-            this.btnNone.Text = "None";
-            this.btnNone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnNone.UseVisualStyleBackColor = true;
+            this.btnGreenBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGreenBox.ImageIndex = 5;
+            this.btnGreenBox.ImageList = this.imlToolBox;
+            this.btnGreenBox.Location = new System.Drawing.Point(47, 517);
+            this.btnGreenBox.Margin = new System.Windows.Forms.Padding(4);
+            this.btnGreenBox.Name = "btnGreenBox";
+            this.btnGreenBox.Size = new System.Drawing.Size(183, 84);
+            this.btnGreenBox.TabIndex = 8;
+            this.btnGreenBox.Text = "Green Box";
+            this.btnGreenBox.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnGreenBox.UseVisualStyleBackColor = true;
+            this.btnGreenBox.Click += new System.EventHandler(this.ToolButtonsHandler);
             // 
-            // btnWall
+            // btnRedBox
             // 
-            this.btnWall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnWall.ImageIndex = 1;
-            this.btnWall.ImageList = this.imlToolBox;
-            this.btnWall.Location = new System.Drawing.Point(47, 106);
-            this.btnWall.Margin = new System.Windows.Forms.Padding(4);
-            this.btnWall.Name = "btnWall";
-            this.btnWall.Size = new System.Drawing.Size(183, 84);
-            this.btnWall.TabIndex = 4;
-            this.btnWall.Text = "Wall";
-            this.btnWall.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnWall.UseVisualStyleBackColor = true;
+            this.btnRedBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRedBox.ImageIndex = 4;
+            this.btnRedBox.ImageList = this.imlToolBox;
+            this.btnRedBox.Location = new System.Drawing.Point(47, 416);
+            this.btnRedBox.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRedBox.Name = "btnRedBox";
+            this.btnRedBox.Size = new System.Drawing.Size(183, 84);
+            this.btnRedBox.TabIndex = 7;
+            this.btnRedBox.Text = "Red Box";
+            this.btnRedBox.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnRedBox.UseVisualStyleBackColor = true;
+            this.btnRedBox.Click += new System.EventHandler(this.ToolButtonsHandler);
             // 
             // btnGreenDoor
             // 
@@ -152,6 +157,7 @@
             this.btnGreenDoor.Text = "Green Door";
             this.btnGreenDoor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnGreenDoor.UseVisualStyleBackColor = true;
+            this.btnGreenDoor.Click += new System.EventHandler(this.ToolButtonsHandler);
             // 
             // btnRedDoor
             // 
@@ -167,34 +173,37 @@
             this.btnRedDoor.Text = "Red Door";
             this.btnRedDoor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnRedDoor.UseVisualStyleBackColor = true;
+            this.btnRedDoor.Click += new System.EventHandler(this.ToolButtonsHandler);
             // 
-            // btnRedBox
+            // btnWall
             // 
-            this.btnRedBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRedBox.ImageIndex = 4;
-            this.btnRedBox.ImageList = this.imlToolBox;
-            this.btnRedBox.Location = new System.Drawing.Point(47, 416);
-            this.btnRedBox.Margin = new System.Windows.Forms.Padding(4);
-            this.btnRedBox.Name = "btnRedBox";
-            this.btnRedBox.Size = new System.Drawing.Size(183, 84);
-            this.btnRedBox.TabIndex = 7;
-            this.btnRedBox.Text = "Red Box";
-            this.btnRedBox.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnRedBox.UseVisualStyleBackColor = true;
+            this.btnWall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnWall.ImageIndex = 1;
+            this.btnWall.ImageList = this.imlToolBox;
+            this.btnWall.Location = new System.Drawing.Point(47, 106);
+            this.btnWall.Margin = new System.Windows.Forms.Padding(4);
+            this.btnWall.Name = "btnWall";
+            this.btnWall.Size = new System.Drawing.Size(183, 84);
+            this.btnWall.TabIndex = 4;
+            this.btnWall.Text = "Wall";
+            this.btnWall.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnWall.UseVisualStyleBackColor = true;
+            this.btnWall.Click += new System.EventHandler(this.ToolButtonsHandler);
             // 
-            // btnGreenBox
+            // btnNone
             // 
-            this.btnGreenBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGreenBox.ImageIndex = 5;
-            this.btnGreenBox.ImageList = this.imlToolBox;
-            this.btnGreenBox.Location = new System.Drawing.Point(47, 517);
-            this.btnGreenBox.Margin = new System.Windows.Forms.Padding(4);
-            this.btnGreenBox.Name = "btnGreenBox";
-            this.btnGreenBox.Size = new System.Drawing.Size(183, 84);
-            this.btnGreenBox.TabIndex = 8;
-            this.btnGreenBox.Text = "Green Box";
-            this.btnGreenBox.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnGreenBox.UseVisualStyleBackColor = true;
+            this.btnNone.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnNone.ImageIndex = 0;
+            this.btnNone.ImageList = this.imlToolBox;
+            this.btnNone.Location = new System.Drawing.Point(47, 4);
+            this.btnNone.Margin = new System.Windows.Forms.Padding(4);
+            this.btnNone.Name = "btnNone";
+            this.btnNone.Size = new System.Drawing.Size(183, 84);
+            this.btnNone.TabIndex = 3;
+            this.btnNone.Text = "None";
+            this.btnNone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnNone.UseVisualStyleBackColor = true;
+            this.btnNone.Click += new System.EventHandler(this.ToolButtonsHandler);
             // 
             // lblColumn
             // 
@@ -243,6 +252,21 @@
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.White;
+            this.imageList1.Images.SetKeyName(0, "None.png");
+            this.imageList1.Images.SetKeyName(1, "Wall.png");
+            this.imageList1.Images.SetKeyName(2, "RedDoor.png");
+            this.imageList1.Images.SetKeyName(3, "GreenDoor.png");
+            this.imageList1.Images.SetKeyName(4, "RedBox.png");
+            this.imageList1.Images.SetKeyName(5, "GreenBox.png");
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.FileName = "savegame1.qgame";
+            // 
             // frmDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -287,5 +311,7 @@
         private System.Windows.Forms.TextBox txtColumn;
         private System.Windows.Forms.Label lblRow;
         private System.Windows.Forms.Button btnGenerate;
+        public System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
