@@ -1,4 +1,11 @@
-﻿using DKoQGame;
+﻿/*
+ * Program: PROG2370-SEC4 Game Programming
+ * Purpose: Assignment 2
+ * Revision History:
+ *      created by Dahyun Ko, Oct/31/2023
+ */
+
+using DKoQGame;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

@@ -47,8 +47,7 @@
             this.txtColumn = new System.Windows.Forms.TextBox();
             this.lblRow = new System.Windows.Forms.Label();
             this.btnGenerate = new System.Windows.Forms.Button();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.sfdSave = new System.Windows.Forms.SaveFileDialog();
             this.pnlGrid = new System.Windows.Forms.Panel();
             this.mnuDesigner.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -253,20 +252,9 @@
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
-            // imageList1
+            // sfdSave
             // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.White;
-            this.imageList1.Images.SetKeyName(0, "None.png");
-            this.imageList1.Images.SetKeyName(1, "Wall.png");
-            this.imageList1.Images.SetKeyName(2, "RedDoor.png");
-            this.imageList1.Images.SetKeyName(3, "GreenDoor.png");
-            this.imageList1.Images.SetKeyName(4, "RedBox.png");
-            this.imageList1.Images.SetKeyName(5, "GreenBox.png");
-            // 
-            // saveFileDialog1
-            // 
-            this.saveFileDialog1.FileName = "savegame1.qgame";
+            this.sfdSave.FileName = "savegame1.qgame";
             // 
             // pnlGrid
             // 
@@ -320,8 +308,7 @@
         private System.Windows.Forms.TextBox txtColumn;
         private System.Windows.Forms.Label lblRow;
         private System.Windows.Forms.Button btnGenerate;
-        public System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.SaveFileDialog sfdSave;
         private System.Windows.Forms.Panel pnlGrid;
     }
 }

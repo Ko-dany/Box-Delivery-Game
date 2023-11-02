@@ -57,7 +57,6 @@ namespace DKoQGame
 
             int pictureBoxSize = Math.Min(pictureBoxWidth, pictureBoxHeight);
             pictureBoxSize = pictureBoxSize > 130 ? 130 : pictureBoxSize;
-            MessageBox.Show(pictureBoxSize.ToString());
 
             gameManager.InitializeBoard(rows, columns);
 
@@ -116,7 +115,7 @@ namespace DKoQGame
         public frmDesigner()
         {
             InitializeComponent();
-            this.Size = new System.Drawing.Size(1100, 750);
+            Size = new Size(1100, 750);
         }
 
         private void frmDesigner_Load(object sender, EventArgs e)
@@ -158,6 +157,7 @@ namespace DKoQGame
             }
         }
 
+
         // Assigns selectedToolIndex based on the button user selects.
         private void ToolButtonsHandler(object sender, EventArgs e)
         {
@@ -169,22 +169,18 @@ namespace DKoQGame
         // When saving, it generates the info message which tells how many objects in the grid, and content for the text file.
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult r = saveFileDialog1.ShowDialog();
-            switch (r)
+            DialogResult r = sfdSave.ShowDialog();
+            if(r == DialogResult.OK)
             {
-                case DialogResult.OK:
-                    gameManager.SaveFile();
+                gameManager.SaveFile();
 
-                    string fileName = saveFileDialog1.FileName;
+                string fileName = sfdSave.FileName;
 
-                    StreamWriter writer = new StreamWriter(fileName);
-                    writer.WriteLine(gameManager.FileContent);
-                    writer.Close();
+                StreamWriter writer = new StreamWriter(fileName);
+                writer.WriteLine(gameManager.FileContent);
+                writer.Close();
 
-                    MessageBox.Show(gameManager.FileSaveInfo);
-                    break;
-                default:
-                    break;
+                MessageBox.Show(gameManager.FileSaveInfo);
             }
         }
 
