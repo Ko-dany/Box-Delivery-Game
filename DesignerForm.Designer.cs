@@ -49,6 +49,7 @@
             this.btnGenerate = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.pnlGrid = new System.Windows.Forms.Panel();
             this.mnuDesigner.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -78,7 +79,7 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -267,12 +268,20 @@
             // 
             this.saveFileDialog1.FileName = "savegame1.qgame";
             // 
+            // pnlGrid
+            // 
+            this.pnlGrid.Location = new System.Drawing.Point(274, 111);
+            this.pnlGrid.Name = "pnlGrid";
+            this.pnlGrid.Size = new System.Drawing.Size(1071, 709);
+            this.pnlGrid.TabIndex = 9;
+            // 
             // frmDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1357, 828);
+            this.Controls.Add(this.pnlGrid);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.lblRow);
             this.Controls.Add(this.panel1);
@@ -313,5 +322,6 @@
         private System.Windows.Forms.Button btnGenerate;
         public System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Panel pnlGrid;
     }
 }

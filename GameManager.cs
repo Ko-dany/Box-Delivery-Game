@@ -29,16 +29,17 @@ namespace GameDesign
             Board[row, column] = pictureBox;
         }
 
-        public void StoreDataToBoard(int row, int column, int tool)
+        public void StoreToolData(int row, int column, int tool)
         {
             Board[row, column].Tool = tool;
         }
 
         public void SaveFile()
         {
+            FileContent = "";
             int walls = 0, doors = 0, boxes = 0;
 
-            FileContent += $"{Rows}\n" + $"{Columns}\n";
+            FileContent += $"{Rows}\n" + $"{Columns}\n";    //Rows and columns of the grid
 
             for (int row=0; row < Rows; row++)
             {
@@ -46,7 +47,7 @@ namespace GameDesign
                 {
                     int tool = Board[row, col].Tool;
 
-                    FileContent += $"{row}\n"+ $"{col}\n"+ $"{tool}\n";
+                    FileContent += $"{row}\n"+ $"{col}\n"+ $"{tool}\n";     //Row, column and tool info for each slot
 
                     switch (tool)
                     {
@@ -71,8 +72,6 @@ namespace GameDesign
                 +$"Total number of walls: {walls}\n"
                 + $"Total number of doors: {doors}\n"
                 + $"Total number of boxes: {boxes}\n";
-
         }
-
     }
 }

@@ -11,6 +11,6 @@ namespace DKoQGame
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public int Tool {  get; set; }  // The tool object
+        public int Tool {  get; set; } 
     }
 }

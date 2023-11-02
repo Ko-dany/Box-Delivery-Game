@@ -12,6 +12,6 @@ namespace GameDesign
     {
         void InitializeBoard(int rows, int columns);
         void CreatePictureBoxData(int row, int column, NewPictureBox pictureBox);
-        void StoreDataToBoard(int row, int column, int tool);
+        void StoreToolData(int row, int column, int tool);
     }
 }

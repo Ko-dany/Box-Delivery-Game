@@ -25,36 +25,39 @@ namespace DKoQGame
 
         // =============================== Variables ===============================
 
-        public GameManager gameManager;
-        public List<Control> existingPictureBoxes;
-        public int toolIndex;
+        private GameManager gameManager;
+        private List<Control> existingPictureBoxes;
+        private int selectedToolIndex;
+        private int gridBoxWidth;
+        private int gridBoxHeight;
 
         // =============================== Methods ===============================
 
         // Assgins image to the picturebox in the grid based on what user selected
         // then store the data(tool) into the GameBoard.
-        public void AssignToolImage(object sender, EventArgs e)
+        private void AssignToolImage(object sender, EventArgs e)
         {
             NewPictureBox selectedPictureBox = sender as NewPictureBox;   // Cast sender as PictureBox or return null
-            if(selectedPictureBox.Tool != toolIndex)
-            {
-                if (toolIndex == 0) selectedPictureBox.Image = null;
-                else selectedPictureBox.Image = imlToolBox.Images[toolIndex];
-                selectedPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
 
-                gameManager.StoreDataToBoard(selectedPictureBox.Row, selectedPictureBox.Column, toolIndex);
+            if(selectedPictureBox.Tool != selectedToolIndex) // Change image only when different tool is selected
+            {
+                selectedPictureBox.Image = selectedToolIndex == 0 ? null : imlToolBox.Images[selectedToolIndex];
+                gameManager.StoreToolData(selectedPictureBox.Row, selectedPictureBox.Column, selectedToolIndex);
             }
         }
 
+
         // Create Grid on the form and store every row/column data into the GameBoard.
         // Initalize each slot's tool as 0.
-        public void CreateGrid(int rows, int columns)
+        private void CreateGrid(int rows, int columns)
         {
-            int startX = 250;
-            int startY = 100;
-
-            int pictureBoxSize = 100; // Dynamically
             int pictureBoxMargin = 3;
+            int pictureBoxWidth = (gridBoxWidth- pictureBoxMargin*columns) / columns;
+            int pictureBoxHeight = (gridBoxHeight-pictureBoxMargin*rows)/ rows;
+
+            int pictureBoxSize = Math.Min(pictureBoxWidth, pictureBoxHeight);
+            pictureBoxSize = pictureBoxSize > 130 ? 130 : pictureBoxSize;
+            MessageBox.Show(pictureBoxSize.ToString());
 
             gameManager.InitializeBoard(rows, columns);
 
@@ -64,28 +67,30 @@ namespace DKoQGame
                 {
                     NewPictureBox pictureBox = new NewPictureBox()
                     {
-                        Location = new Point(startX + (column * (pictureBoxSize + pictureBoxMargin)), startY + (row * (pictureBoxSize + pictureBoxMargin))),
+                        Location = new Point(column * (pictureBoxSize + pictureBoxMargin), row * (pictureBoxSize + pictureBoxMargin)),
                         Size = new Size(pictureBoxSize, pictureBoxSize),
                         BorderStyle = BorderStyle.FixedSingle,
                         Row = row,
                         Column = column,
-                        Tool = 0
+                        Tool = 0,
+                        SizeMode = PictureBoxSizeMode.StretchImage
                     };
-
                     gameManager.CreatePictureBoxData(pictureBox.Row, pictureBox.Column, pictureBox);
                     pictureBox.Click += new EventHandler(AssignToolImage);
-                    Controls.Add(pictureBox);
+                    pnlGrid.Controls.Add(pictureBox);
+                    
                 }
             }
         }
 
+
         // Checks if there's already grid existing on the form.
         // Returns true if grid is existing.
-        public bool HasGrid()
+        private bool HasGrid()
         {
             existingPictureBoxes = new List<Control>();
 
-            foreach (Control control in Controls)
+            foreach (Control control in pnlGrid.Controls)
             {
                 if (control is NewPictureBox)
                 {
@@ -96,48 +101,42 @@ namespace DKoQGame
             return existingPictureBoxes.Count > 0;
         }
 
+
         // Removes the grid existing on the form.
-        public void RemoveGrid()
+        private void RemoveGrid()
         {
             foreach (Control pictureBox in existingPictureBoxes)
             {
-                Controls.Remove(pictureBox);
+                pnlGrid.Controls.Remove(pictureBox);
                 pictureBox.Dispose();
             }
         }
 
         // =============================== Form Controls ===============================
-
         public frmDesigner()
         {
             InitializeComponent();
-            this.Size = new System.Drawing.Size(1100, 700);
-        }
-
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            this.Size = new System.Drawing.Size(1100, 750);
         }
 
         private void frmDesigner_Load(object sender, EventArgs e)
         {
             gameManager = new GameManager();
+            gridBoxWidth = pnlGrid.Width;
+            gridBoxHeight = pnlGrid.Height;
         }
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
-            if (HasGrid())
+            if (HasGrid())  // When there is existing Grid
             {
                DialogResult result = MessageBox.Show("Do you want to create a new level?\n" + "If you do, the current level will be lost", "QGame", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-               if(result == DialogResult.Yes)
+               if(result == DialogResult.Yes)   // If user selects "Yes"
                 {
                     if (int.TryParse(txtRow.Text, out int rows) && int.TryParse(txtColumn.Text, out int columns) && rows > 0 && columns > 0)
                     {
-                        if (HasGrid())
-                        {
-                            RemoveGrid();
-                        }
+                        RemoveGrid();
                         CreateGrid(rows, columns);
                     }
                     else
@@ -146,14 +145,10 @@ namespace DKoQGame
                     }
                 }
             }
-            else
+            else    // When there is NOT existing Grid
             {
                 if (int.TryParse(txtRow.Text, out int rows) && int.TryParse(txtColumn.Text, out int columns) && rows > 0 && columns > 0)
                 {
-                    if (HasGrid())
-                    {
-                        RemoveGrid();
-                    }
                     CreateGrid(rows, columns);
                 }
                 else
@@ -163,24 +158,25 @@ namespace DKoQGame
             }
         }
 
-        // Assign toolIndex based on the button user clickes.
+        // Assigns selectedToolIndex based on the button user selects.
         private void ToolButtonsHandler(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            toolIndex = btn.ImageIndex;
+            selectedToolIndex = btn.ImageIndex;
         }
         
 
-        // When saving it generates the info message which tells how many objects in the grid, and content for the text file.
+        // When saving, it generates the info message which tells how many objects in the grid, and content for the text file.
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            gameManager.SaveFile();
-
             DialogResult r = saveFileDialog1.ShowDialog();
             switch (r)
             {
                 case DialogResult.OK:
+                    gameManager.SaveFile();
+
                     string fileName = saveFileDialog1.FileName;
+
                     StreamWriter writer = new StreamWriter(fileName);
                     writer.WriteLine(gameManager.FileContent);
                     writer.Close();
@@ -190,6 +186,11 @@ namespace DKoQGame
                 default:
                     break;
             }
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
