@@ -23,14 +23,15 @@ namespace DKoQGame
             frmDesigner.Show();
         }
 
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            frmPlay frmPlay = new frmPlay();
+            frmPlay.Show();
+        }
+
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void btnPlay_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Play part will be updated soon.", "Will be updated", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }
