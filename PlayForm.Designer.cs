@@ -41,6 +41,7 @@
             this.btnDown = new System.Windows.Forms.Button();
             this.btnLeft = new System.Windows.Forms.Button();
             this.btnRight = new System.Windows.Forms.Button();
+            this.ofdOpen = new System.Windows.Forms.OpenFileDialog();
             this.mnuPlay.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +70,7 @@
             this.openToolStripMenuItem1.Name = "openToolStripMenuItem1";
             this.openToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
             this.openToolStripMenuItem1.Text = "Load Game";
+            this.openToolStripMenuItem1.Click += new System.EventHandler(this.openToolStripMenuItem1_Click);
             // 
             // closeToolStripMenuItem
             // 
@@ -99,6 +101,8 @@
             this.txtMoves.ReadOnly = true;
             this.txtMoves.Size = new System.Drawing.Size(207, 22);
             this.txtMoves.TabIndex = 3;
+            this.txtMoves.Text = "0";
+            this.txtMoves.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // txtBoxes
             // 
@@ -107,6 +111,8 @@
             this.txtBoxes.ReadOnly = true;
             this.txtBoxes.Size = new System.Drawing.Size(207, 22);
             this.txtBoxes.TabIndex = 5;
+            this.txtBoxes.Text = "0";
+            this.txtBoxes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblBoxes
             // 
@@ -153,6 +159,10 @@
             this.btnRight.Text = "Right";
             this.btnRight.UseVisualStyleBackColor = true;
             // 
+            // ofdOpen
+            // 
+            this.ofdOpen.FileName = "openFileDialog1";
+            // 
             // frmPlay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -193,5 +203,6 @@
         private System.Windows.Forms.Button btnDown;
         private System.Windows.Forms.Button btnLeft;
         private System.Windows.Forms.Button btnRight;
+        private System.Windows.Forms.OpenFileDialog ofdOpen;
     }
 }
