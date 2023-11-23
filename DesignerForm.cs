@@ -25,7 +25,7 @@ namespace DKoQGame
 
         // =============================== Variables ===============================
 
-        private GameManager gameManager;
+        private DesignManager gameManager;
         private List<Control> existingPictureBoxes;
         private int selectedToolIndex;
         private int gridBoxWidth;
@@ -120,7 +120,7 @@ namespace DKoQGame
 
         private void frmDesigner_Load(object sender, EventArgs e)
         {
-            gameManager = new GameManager();
+            gameManager = new DesignManager();
             gridBoxWidth = pnlGrid.Width;
             gridBoxHeight = pnlGrid.Height;
         }

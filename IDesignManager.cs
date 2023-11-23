@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace GameDesign
 {
-    public interface IGameManager
+    public interface IDesignManager
     {
         void InitializeBoard(int rows, int columns);
         void CreatePictureBoxData(int row, int column, NewPictureBox pictureBox);

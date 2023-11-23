@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPlay));
             this.mnuPlay = new System.Windows.Forms.MenuStrip();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,6 +44,7 @@
             this.btnLeft = new System.Windows.Forms.Button();
             this.btnRight = new System.Windows.Forms.Button();
             this.ofdOpen = new System.Windows.Forms.OpenFileDialog();
+            this.imlToolBox = new System.Windows.Forms.ImageList(this.components);
             this.mnuPlay.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,14 +71,14 @@
             // openToolStripMenuItem1
             // 
             this.openToolStripMenuItem1.Name = "openToolStripMenuItem1";
-            this.openToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.openToolStripMenuItem1.Size = new System.Drawing.Size(168, 26);
             this.openToolStripMenuItem1.Text = "Load Game";
             this.openToolStripMenuItem1.Click += new System.EventHandler(this.openToolStripMenuItem1_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(168, 26);
             this.closeToolStripMenuItem.Text = "Close";
             // 
             // pnlGameboard
@@ -96,6 +99,7 @@
             // 
             // txtMoves
             // 
+            this.txtMoves.Enabled = false;
             this.txtMoves.Location = new System.Drawing.Point(1010, 110);
             this.txtMoves.Name = "txtMoves";
             this.txtMoves.ReadOnly = true;
@@ -106,6 +110,7 @@
             // 
             // txtBoxes
             // 
+            this.txtBoxes.Enabled = false;
             this.txtBoxes.Location = new System.Drawing.Point(1010, 209);
             this.txtBoxes.Name = "txtBoxes";
             this.txtBoxes.ReadOnly = true;
@@ -163,6 +168,19 @@
             // 
             this.ofdOpen.FileName = "openFileDialog1";
             // 
+            // imlToolBox
+            // 
+            this.imlToolBox.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imlToolBox.ImageStream")));
+            this.imlToolBox.TransparentColor = System.Drawing.Color.White;
+            this.imlToolBox.Images.SetKeyName(0, "None.png");
+            this.imlToolBox.Images.SetKeyName(1, "Wall.png");
+            this.imlToolBox.Images.SetKeyName(2, "RedDoor.png");
+            this.imlToolBox.Images.SetKeyName(3, "GreenDoor.png");
+            this.imlToolBox.Images.SetKeyName(4, "RedBox.png");
+            this.imlToolBox.Images.SetKeyName(5, "GreenBox.png");
+            this.imlToolBox.Images.SetKeyName(6, "RedBox.png");
+            this.imlToolBox.Images.SetKeyName(7, "GreenBox.png");
+            // 
             // frmPlay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -181,6 +199,7 @@
             this.MainMenuStrip = this.mnuPlay;
             this.Name = "frmPlay";
             this.Text = "Play Form";
+            this.Load += new System.EventHandler(this.frmPlay_Load);
             this.mnuPlay.ResumeLayout(false);
             this.mnuPlay.PerformLayout();
             this.ResumeLayout(false);
@@ -204,5 +223,6 @@
         private System.Windows.Forms.Button btnLeft;
         private System.Windows.Forms.Button btnRight;
         private System.Windows.Forms.OpenFileDialog ofdOpen;
+        public System.Windows.Forms.ImageList imlToolBox;
     }
 }

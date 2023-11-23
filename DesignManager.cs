@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace GameDesign
 {
-    public class GameManager : IGameManager
+    public class DesignManager : IDesignManager
     {
         public NewPictureBox[,] Board { get; set; }
         public int Rows { get; set; }
@@ -80,5 +80,6 @@ namespace GameDesign
                 + $"Total number of doors: {doors}\n"
                 + $"Total number of boxes: {boxes}\n";
         }
+
     }
 }

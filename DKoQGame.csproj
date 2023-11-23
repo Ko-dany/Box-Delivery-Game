@@ -58,17 +58,19 @@
     <Compile Include="DesignerForm.Designer.cs">
       <DependentUpon>DesignerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IPlayManager.cs" />
     <Compile Include="PlayForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PlayForm.Designer.cs">
       <DependentUpon>PlayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameManager.cs" />
-    <Compile Include="IGameManager.cs" />
+    <Compile Include="DesignManager.cs" />
+    <Compile Include="IDesignManager.cs" />
     <Compile Include="NewPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PlayManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ControlForm.resx">
