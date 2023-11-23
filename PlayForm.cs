@@ -112,9 +112,10 @@ namespace DKoQGame
                     
                     string[] fileContent = File.ReadAllLines(filePath);                    
 
-                    playManager.GetGameBoardInfo(fileContent);
+                    playManager.GetGameBoardInfoFromFile(fileContent);
                     CreateGrid(playManager.Rows, playManager.Columns, playManager.Tools);
 
+                    txtBoxes.Text = (playManager.RedBoxes + playManager.GreenBoxes).ToString();
 
                 }
                 catch (Exception ex)
