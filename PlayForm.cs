@@ -25,20 +25,32 @@ namespace DKoQGame
         private int[,] GameBoard { get; set; }
         private int gridBoxWidth;
         private int gridBoxHeight;
+        int pictureBoxMargin = 3;
 
-        private int[,] currentSelectedBox;
+        private NewPictureBox currentSelectedBox;
+        private static int totalMoves;
 
         // =============================== Methods ===============================
+        public bool IsRedBox(NewPictureBox box)
+        {
+            if(box.Tool == 4 || box.Tool == 6) { return true; }
+            return false;
+        }
+        public bool IsGreenBox(NewPictureBox box)
+        {
+            if (box.Tool == 5 || box.Tool == 7) { return true; }
+            return false;
+        }
 
         public void DeactivateAllBoxes()
         {
             foreach(NewPictureBox box in existingBoxes)
             {
-                if(box.Tool == 4 || box.Tool == 6)
+                if(IsRedBox(box))
                 {
                     box.Image = imlToolBox.Images[6];
                 }
-                else if(box.Tool == 5 || box.Tool == 7)
+                else if(IsGreenBox(box))
                 {
                     box.Image = imlToolBox.Images[7];
                 }
@@ -48,25 +60,32 @@ namespace DKoQGame
         private void ActivateBox(object sender, EventArgs e)
         {
             DeactivateAllBoxes();
-            NewPictureBox selectedPictureBox = sender as NewPictureBox;   // Cast sender as PictureBox or return null
+            NewPictureBox selectedPictureBox = sender as NewPictureBox;
 
-            // code when clicked
-            if (selectedPictureBox.Tool == 4 || selectedPictureBox.Tool == 6)   // Red box
+            if (IsRedBox(selectedPictureBox))
             {
                 selectedPictureBox.Image = imlToolBox.Images[8];
             }
-            else if(selectedPictureBox.Tool == 5 || selectedPictureBox.Tool == 7)   // Green box
+            else if(IsGreenBox(selectedPictureBox))
             {
                 selectedPictureBox.Image = imlToolBox.Images[9];
             }
+
+            currentSelectedBox = (NewPictureBox)sender;
+            selectedPictureBox.BringToFront();
         }
 
+        private void CountTotalMoves()
+        {
+            totalMoves += 1;
+            txtMoves.Text = totalMoves.ToString();
+        }
         private void CreateGameboard(int rows, int columns, int[,] ToolBlocks)
         {
 
             if (HasGrid()) { RemoveGrid(); }
 
-            int pictureBoxMargin = 3;
+
             int pictureBoxWidth = (gridBoxWidth - pictureBoxMargin * columns) / columns;
             int pictureBoxHeight = (gridBoxHeight - pictureBoxMargin * rows) / rows;
 
@@ -90,7 +109,10 @@ namespace DKoQGame
                         Image = ToolBlocks[row, column] == 0 ? null : imlToolBox.Images[ToolBlocks[row, column]]
                     };
                     pictureBox.Click += new EventHandler(ActivateBox);
-                    if((pictureBox.Tool == 4 || pictureBox.Tool == 6) || (pictureBox.Tool == 5 || pictureBox.Tool == 7)) { existingBoxes.Add(pictureBox); }
+                    if(IsRedBox(pictureBox) || IsGreenBox(pictureBox)) 
+                    { 
+                        existingBoxes.Add(pictureBox);
+                    }
                     pnlGameboard.Controls.Add(pictureBox);
                 }
             }
@@ -111,8 +133,6 @@ namespace DKoQGame
             return existingPictureBoxes.Count > 0;
         }
 
-
-        // Removes the grid existing on the form.
         private void RemoveGrid()
         {
             foreach (Control pictureBox in existingPictureBoxes)
@@ -134,6 +154,7 @@ namespace DKoQGame
             playManager = new PlayManager();
             gridBoxWidth = pnlGameboard.Width;
             gridBoxHeight = pnlGameboard.Height;
+            totalMoves = 0;
         }
 
         private void openToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -167,6 +188,98 @@ namespace DKoQGame
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnUp_Click(object sender, EventArgs e)
+        {
+            int currentRow = currentSelectedBox.Row;
+            int currentColumn = currentSelectedBox.Column;
+
+            int currentRowUp = currentRow - 1;
+
+            MessageBox.Show($"Go to [{currentRowUp}, {currentColumn}]: {playManager.GetToolFromPictureBox(currentRowUp, currentColumn)}");
+            if (currentRowUp >= 0)
+            {
+                if (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 0)    //When it's empty tile
+                {
+                    currentSelectedBox.Top -= (currentSelectedBox.Height + pictureBoxMargin);
+
+                    currentSelectedBox.Row = currentRowUp;
+                    playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                }
+            }
+        }
+
+        private void btnDown_Click(object sender, EventArgs e)
+        {
+            int currentRow = currentSelectedBox.Row;
+            int currentColumn = currentSelectedBox.Column;
+
+            int currentRowDown = currentRow + 1;
+
+            MessageBox.Show($"Go to [{currentRowDown}, {currentColumn}]: {playManager.GetToolFromPictureBox(currentRowDown, currentColumn)}");
+            if (currentRowDown <= playManager.Rows)
+            {
+                if (playManager.GetToolFromPictureBox(currentRowDown, currentColumn) == 0)    //When it's empty tile
+                {
+                    currentSelectedBox.Top += (currentSelectedBox.Height + pictureBoxMargin);
+
+                    currentSelectedBox.Row = currentRowDown;
+                    playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                }
+            }
+        }
+
+        private void btnLeft_Click(object sender, EventArgs e)
+        {
+            int currentRow = currentSelectedBox.Row;
+            int currentColumn = currentSelectedBox.Column;
+
+            int currentColumnLeft = currentColumn - 1;
+
+            MessageBox.Show($"Go to [{currentRow}, {currentColumnLeft}]: {playManager.GetToolFromPictureBox(currentRow, currentColumnLeft)}");
+            if (currentColumnLeft >=0)
+            {
+                if (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 0)    //When it's empty tile
+                {
+                    currentSelectedBox.Left -= (currentSelectedBox.Width + pictureBoxMargin);
+
+                    currentSelectedBox.Column = currentColumnLeft;
+                    playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                }
+            }
+        }
+
+        private void btnRight_Click(object sender, EventArgs e)
+        {
+            int currentRow = currentSelectedBox.Row;
+            int currentColumn = currentSelectedBox.Column;
+
+            int currentColumnRight = currentColumn + 1;
+
+            MessageBox.Show($"Go to [{currentRow}, {currentColumnRight}]: {playManager.GetToolFromPictureBox(currentRow, currentColumnRight)}");
+            if (currentColumnRight >= 0)
+            {
+                if (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 0)    //When it's empty tile
+                {
+                    currentSelectedBox.Left += (currentSelectedBox.Width + pictureBoxMargin);
+
+                    currentSelectedBox.Column = currentColumnRight;
+                    playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                }
+            }
         }
     }
 }

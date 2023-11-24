@@ -60,5 +60,15 @@ namespace DKoQGame
 
             // If the number of boxes and doors are not equivalent, throw an error.
         }
+
+        public int GetToolFromPictureBox(int row, int column)
+        {
+            return Tools[row, column];
+        }
+
+        public void UpdateGameBoard(int row, int column, int tool)
+        {
+            Tools[row, column] = tool;
+        }
     }
 }
