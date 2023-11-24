@@ -71,15 +71,16 @@
             // openToolStripMenuItem1
             // 
             this.openToolStripMenuItem1.Name = "openToolStripMenuItem1";
-            this.openToolStripMenuItem1.Size = new System.Drawing.Size(168, 26);
+            this.openToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
             this.openToolStripMenuItem1.Text = "Load Game";
             this.openToolStripMenuItem1.Click += new System.EventHandler(this.openToolStripMenuItem1_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(168, 26);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
             // pnlGameboard
             // 
@@ -180,6 +181,8 @@
             this.imlToolBox.Images.SetKeyName(5, "GreenBox.png");
             this.imlToolBox.Images.SetKeyName(6, "RedBox.png");
             this.imlToolBox.Images.SetKeyName(7, "GreenBox.png");
+            this.imlToolBox.Images.SetKeyName(8, "RedBox_Selected.png");
+            this.imlToolBox.Images.SetKeyName(9, "GreenBox_Selected.png");
             // 
             // frmPlay
             // 

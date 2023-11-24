@@ -57,6 +57,8 @@ namespace DKoQGame
                     }
                 }
             }
+
+            // If the number of boxes and doors are not equivalent, throw an error.
         }
     }
 }

@@ -20,14 +20,48 @@ namespace DKoQGame
 
         private PlayManager playManager;
         private List<Control> existingPictureBoxes;
+        private List<NewPictureBox> existingBoxes;
 
         private int[,] GameBoard { get; set; }
         private int gridBoxWidth;
         private int gridBoxHeight;
 
+        private int[,] currentSelectedBox;
+
         // =============================== Methods ===============================
 
-        private void CreateGrid(int rows, int columns, int[,] ToolBlocks)
+        public void DeactivateAllBoxes()
+        {
+            foreach(NewPictureBox box in existingBoxes)
+            {
+                if(box.Tool == 4 || box.Tool == 6)
+                {
+                    box.Image = imlToolBox.Images[6];
+                }
+                else if(box.Tool == 5 || box.Tool == 7)
+                {
+                    box.Image = imlToolBox.Images[7];
+                }
+            }
+        }
+
+        private void ActivateBox(object sender, EventArgs e)
+        {
+            DeactivateAllBoxes();
+            NewPictureBox selectedPictureBox = sender as NewPictureBox;   // Cast sender as PictureBox or return null
+
+            // code when clicked
+            if (selectedPictureBox.Tool == 4 || selectedPictureBox.Tool == 6)   // Red box
+            {
+                selectedPictureBox.Image = imlToolBox.Images[8];
+            }
+            else if(selectedPictureBox.Tool == 5 || selectedPictureBox.Tool == 7)   // Green box
+            {
+                selectedPictureBox.Image = imlToolBox.Images[9];
+            }
+        }
+
+        private void CreateGameboard(int rows, int columns, int[,] ToolBlocks)
         {
 
             if (HasGrid()) { RemoveGrid(); }
@@ -38,6 +72,8 @@ namespace DKoQGame
 
             int pictureBoxSize = Math.Min(pictureBoxWidth, pictureBoxHeight);
             pictureBoxSize = pictureBoxSize > 90 ? 90 : pictureBoxSize;
+
+            existingBoxes = new List<NewPictureBox>();
 
             for (int row = 0; row < rows; row++)
             {
@@ -53,6 +89,8 @@ namespace DKoQGame
                         SizeMode = PictureBoxSizeMode.StretchImage,
                         Image = ToolBlocks[row, column] == 0 ? null : imlToolBox.Images[ToolBlocks[row, column]]
                     };
+                    pictureBox.Click += new EventHandler(ActivateBox);
+                    if((pictureBox.Tool == 4 || pictureBox.Tool == 6) || (pictureBox.Tool == 5 || pictureBox.Tool == 7)) { existingBoxes.Add(pictureBox); }
                     pnlGameboard.Controls.Add(pictureBox);
                 }
             }
@@ -107,26 +145,28 @@ namespace DKoQGame
 
                 try
                 {
-
                     filePath = ofdOpen.FileName;
                     
                     string[] fileContent = File.ReadAllLines(filePath);                    
 
                     playManager.GetGameBoardInfoFromFile(fileContent);
-                    CreateGrid(playManager.Rows, playManager.Columns, playManager.Tools);
+                    CreateGameboard(playManager.Rows, playManager.Columns, playManager.Tools);
 
                     txtBoxes.Text = (playManager.RedBoxes + playManager.GreenBoxes).ToString();
 
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Execption is happenning!: " + ex.Message);
+                    MessageBox.Show("Execption is happenning!:\n" + ex.Message);
                 }
 
             }
 
         }
 
-
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
