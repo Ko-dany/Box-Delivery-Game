@@ -44,7 +44,8 @@ namespace DKoQGame
 
         public void DeactivateAllBoxes()
         {
-            foreach(NewPictureBox box in existingBoxes)
+            currentSelectedBox = null;
+            foreach (NewPictureBox box in existingBoxes)
             {
                 if(IsRedBox(box))
                 {
@@ -69,11 +70,11 @@ namespace DKoQGame
 
                 selectedPictureBox.Image = IsRedBox(selectedPictureBox) ? imlToolBox.Images[8] : imlToolBox.Images[9];
             }
-            else
-            {
-                // When user clicks other objects not buttons, all buttons must be deactivated and clicking move buttons must throw error msg.
-                 DeactivateAllBoxes();
-            }
+        }
+
+        private bool ButtonIsSelected()
+        {
+            return (currentSelectedBox != null);
         }
 
         private void CountTotalMoves()
@@ -189,7 +190,6 @@ namespace DKoQGame
             }
 
         }
-
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -197,133 +197,162 @@ namespace DKoQGame
 
         private void btnUp_Click(object sender, EventArgs e)
         {
-            int currentRow = currentSelectedBox.Row;
-            int currentColumn = currentSelectedBox.Column;
-
-            int currentRowUp = currentRow - 1;
-
-            MessageBox.Show($"Go to [{currentRowUp}, {currentColumn}]: {playManager.GetToolFromPictureBox(currentRowUp, currentColumn)}");
-            if (currentRowUp >= 0)
+            if (!ButtonIsSelected())
             {
-                if (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 0)    //When it's empty tile
-                {
-                    currentSelectedBox.Top -= (currentSelectedBox.Height + pictureBoxMargin);
+                MessageBox.Show("Please select a box.");
+            }
+            else
+            {
+                int currentRow = currentSelectedBox.Row;
+                int currentColumn = currentSelectedBox.Column;
 
-                    currentSelectedBox.Row = currentRowUp;
-                    playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                }
-                else
+                int currentRowUp = currentRow - 1;
+
+                MessageBox.Show($"Go to [{currentRowUp}, {currentColumn}]: {playManager.GetToolFromPictureBox(currentRowUp, currentColumn)}");
+                if (currentRowUp >= 0)
                 {
-                    if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 3)))
+                    if (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 0)    //When it's empty tile
                     {
-                        pnlGameboard.Controls.Remove(currentSelectedBox);
-                        existingBoxes.Remove(currentSelectedBox);
-                        currentSelectedBox.Dispose();
-                    }
-                }
-                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+                        currentSelectedBox.Top -= (currentSelectedBox.Height + pictureBoxMargin);
 
-                CountTotalMoves();
-                CountTotalBoxes();
+                        currentSelectedBox.Row = currentRowUp;
+                        playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
+                    }
+                    else
+                    {
+                        if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 3)))
+                        {
+                            pnlGameboard.Controls.Remove(currentSelectedBox);
+                            existingBoxes.Remove(currentSelectedBox);
+                            currentSelectedBox.Dispose();
+                        }
+                    }
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                    CountTotalBoxes();
+                }
             }
         }
 
         private void btnDown_Click(object sender, EventArgs e)
         {
-            int currentRow = currentSelectedBox.Row;
-            int currentColumn = currentSelectedBox.Column;
-
-            int currentRowDown = currentRow + 1;
-
-            MessageBox.Show($"Go to [{currentRowDown}, {currentColumn}]: {playManager.GetToolFromPictureBox(currentRowDown, currentColumn)}");
-            if (currentRowDown <= playManager.Rows)
+            if (!ButtonIsSelected())
             {
-                if (playManager.GetToolFromPictureBox(currentRowDown, currentColumn) == 0)    //When it's empty tile
-                {
-                    currentSelectedBox.Top += (currentSelectedBox.Height + pictureBoxMargin);
-
-                    currentSelectedBox.Row = currentRowDown;
-                    playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                }
-                else
-                {
-                    if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumn) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumn) == 3)))
-                    {
-                        pnlGameboard.Controls.Remove(currentSelectedBox);
-                        existingBoxes.Remove(currentSelectedBox);
-                        currentSelectedBox.Dispose();
-                    }
-                }
-                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                CountTotalMoves();
-                CountTotalBoxes();
+                MessageBox.Show("Please select a box.");
             }
+            else
+            {
+                int currentRow = currentSelectedBox.Row;
+                int currentColumn = currentSelectedBox.Column;
+
+                int currentRowDown = currentRow + 1;
+
+                MessageBox.Show($"Go to [{currentRowDown}, {currentColumn}]: {playManager.GetToolFromPictureBox(currentRowDown, currentColumn)}");
+                if (currentRowDown <= playManager.Rows)
+                {
+                    if (playManager.GetToolFromPictureBox(currentRowDown, currentColumn) == 0)    //When it's empty tile
+                    {
+                        currentSelectedBox.Top += (currentSelectedBox.Height + pictureBoxMargin);
+
+                        currentSelectedBox.Row = currentRowDown;
+                        playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
+                    }
+                    else
+                    {
+                        if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowDown, currentColumn) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowDown, currentColumn) == 3)))
+                        {
+                            pnlGameboard.Controls.Remove(currentSelectedBox);
+                            existingBoxes.Remove(currentSelectedBox);
+                            currentSelectedBox.Dispose();
+                        }
+                    }
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                    CountTotalBoxes();
+                }
+            }   
         }
 
         private void btnLeft_Click(object sender, EventArgs e)
         {
-            int currentRow = currentSelectedBox.Row;
-            int currentColumn = currentSelectedBox.Column;
 
-            int currentColumnLeft = currentColumn - 1;
-
-            MessageBox.Show($"Go to [{currentRow}, {currentColumnLeft}]: {playManager.GetToolFromPictureBox(currentRow, currentColumnLeft)}");
-            if (currentColumnLeft >=0)
+            if (!ButtonIsSelected())
             {
-                if (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 0)    //When it's empty tile
-                {
-                    currentSelectedBox.Left -= (currentSelectedBox.Width + pictureBoxMargin);
+                MessageBox.Show("Please select a box.");
+            }
+            else
+            {
+                int currentRow = currentSelectedBox.Row;
+                int currentColumn = currentSelectedBox.Column;
 
-                    currentSelectedBox.Column = currentColumnLeft;
-                    playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                }
-                else
+                int currentColumnLeft = currentColumn - 1;
+
+                MessageBox.Show($"Go to [{currentRow}, {currentColumnLeft}]: {playManager.GetToolFromPictureBox(currentRow, currentColumnLeft)}");
+                if (currentColumnLeft >= 0)
                 {
-                    if((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 3)))
+                    if (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 0)    //When it's empty tile
                     {
-                        pnlGameboard.Controls.Remove(currentSelectedBox);
-                        existingBoxes.Remove(currentSelectedBox);
-                        currentSelectedBox.Dispose();
-                    }
-                }
-                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+                        currentSelectedBox.Left -= (currentSelectedBox.Width + pictureBoxMargin);
 
-                CountTotalMoves();
-                CountTotalBoxes();
+                        currentSelectedBox.Column = currentColumnLeft;
+                        playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
+                    }
+                    else
+                    {
+                        if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 3)))
+                        {
+                            pnlGameboard.Controls.Remove(currentSelectedBox);
+                            existingBoxes.Remove(currentSelectedBox);
+                            currentSelectedBox.Dispose();
+                        }
+                    }
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                    CountTotalBoxes();
+                }
             }
         }
 
         private void btnRight_Click(object sender, EventArgs e)
         {
-            int currentRow = currentSelectedBox.Row;
-            int currentColumn = currentSelectedBox.Column;
-
-            int currentColumnRight = currentColumn + 1;
-
-            MessageBox.Show($"Go to [{currentRow}, {currentColumnRight}]: {playManager.GetToolFromPictureBox(currentRow, currentColumnRight)}");
-            if (currentColumnRight >= 0)
+            if (!ButtonIsSelected())
             {
-                if (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 0)    //When it's empty tile
-                {
-                    currentSelectedBox.Left += (currentSelectedBox.Width + pictureBoxMargin);
+                MessageBox.Show("Please select a box.");
+            }
+            else
+            {
+                int currentRow = currentSelectedBox.Row;
+                int currentColumn = currentSelectedBox.Column;
 
-                    currentSelectedBox.Column = currentColumnRight;
-                    playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                }
-                else
+                int currentColumnRight = currentColumn + 1;
+
+                MessageBox.Show($"Go to [{currentRow}, {currentColumnRight}]: {playManager.GetToolFromPictureBox(currentRow, currentColumnRight)}");
+                if (currentColumnRight >= 0)
                 {
-                    if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 3)))
+                    if (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 0)    //When it's empty tile
                     {
-                        pnlGameboard.Controls.Remove(currentSelectedBox);
-                        existingBoxes.Remove(currentSelectedBox);
-                        currentSelectedBox.Dispose();
-                    }
-                }
-                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+                        currentSelectedBox.Left += (currentSelectedBox.Width + pictureBoxMargin);
 
-                CountTotalMoves();
-                CountTotalBoxes();
+                        currentSelectedBox.Column = currentColumnRight;
+                        playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
+                    }
+                    else
+                    {
+                        if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 3)))
+                        {
+                            pnlGameboard.Controls.Remove(currentSelectedBox);
+                            existingBoxes.Remove(currentSelectedBox);
+                            currentSelectedBox.Dispose();
+                        }
+                    }
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                    CountTotalBoxes();
+                }
             }
         }
     }
