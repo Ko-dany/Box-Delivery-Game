@@ -62,23 +62,28 @@ namespace DKoQGame
             DeactivateAllBoxes();
             NewPictureBox selectedPictureBox = sender as NewPictureBox;
 
-            if (IsRedBox(selectedPictureBox))
+            if (IsRedBox(selectedPictureBox) || IsGreenBox(selectedPictureBox))
             {
-                selectedPictureBox.Image = imlToolBox.Images[8];
-            }
-            else if(IsGreenBox(selectedPictureBox))
-            {
-                selectedPictureBox.Image = imlToolBox.Images[9];
-            }
+                currentSelectedBox = (NewPictureBox)sender;
+                selectedPictureBox.BringToFront();
 
-            currentSelectedBox = (NewPictureBox)sender;
-            selectedPictureBox.BringToFront();
+                selectedPictureBox.Image = IsRedBox(selectedPictureBox) ? imlToolBox.Images[8] : imlToolBox.Images[9];
+            }
+            else
+            {
+                // When user clicks other objects not buttons, all buttons must be deactivated and clicking move buttons must throw error msg.
+                 DeactivateAllBoxes();
+            }
         }
 
         private void CountTotalMoves()
         {
             totalMoves += 1;
             txtMoves.Text = totalMoves.ToString();
+        }
+        private void CountTotalBoxes()
+        {
+            txtBoxes.Text = existingBoxes.Count.ToString();
         }
         private void CreateGameboard(int rows, int columns, int[,] ToolBlocks)
         {
@@ -206,10 +211,20 @@ namespace DKoQGame
 
                     currentSelectedBox.Row = currentRowUp;
                     playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                    CountTotalMoves();
                 }
+                else
+                {
+                    if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 3)))
+                    {
+                        pnlGameboard.Controls.Remove(currentSelectedBox);
+                        existingBoxes.Remove(currentSelectedBox);
+                        currentSelectedBox.Dispose();
+                    }
+                }
+                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                CountTotalMoves();
+                CountTotalBoxes();
             }
         }
 
@@ -229,10 +244,20 @@ namespace DKoQGame
 
                     currentSelectedBox.Row = currentRowDown;
                     playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                    CountTotalMoves();
                 }
+                else
+                {
+                    if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumn) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumn) == 3)))
+                    {
+                        pnlGameboard.Controls.Remove(currentSelectedBox);
+                        existingBoxes.Remove(currentSelectedBox);
+                        currentSelectedBox.Dispose();
+                    }
+                }
+                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                CountTotalMoves();
+                CountTotalBoxes();
             }
         }
 
@@ -252,10 +277,20 @@ namespace DKoQGame
 
                     currentSelectedBox.Column = currentColumnLeft;
                     playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                    CountTotalMoves();
                 }
+                else
+                {
+                    if((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 3)))
+                    {
+                        pnlGameboard.Controls.Remove(currentSelectedBox);
+                        existingBoxes.Remove(currentSelectedBox);
+                        currentSelectedBox.Dispose();
+                    }
+                }
+                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                CountTotalMoves();
+                CountTotalBoxes();
             }
         }
 
@@ -275,10 +310,20 @@ namespace DKoQGame
 
                     currentSelectedBox.Column = currentColumnRight;
                     playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                    CountTotalMoves();
                 }
+                else
+                {
+                    if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 3)))
+                    {
+                        pnlGameboard.Controls.Remove(currentSelectedBox);
+                        existingBoxes.Remove(currentSelectedBox);
+                        currentSelectedBox.Dispose();
+                    }
+                }
+                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                CountTotalMoves();
+                CountTotalBoxes();
             }
         }
     }
