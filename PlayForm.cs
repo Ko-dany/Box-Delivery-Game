@@ -31,27 +31,18 @@ namespace DKoQGame
         private static int totalMoves;
 
         // =============================== Methods ===============================
-        public bool IsRedBox(NewPictureBox box)
-        {
-            if(box.Tool == 4 || box.Tool == 6) { return true; }
-            return false;
-        }
-        public bool IsGreenBox(NewPictureBox box)
-        {
-            if (box.Tool == 5 || box.Tool == 7) { return true; }
-            return false;
-        }
+
 
         public void DeactivateAllBoxes()
         {
             currentSelectedBox = null;
             foreach (NewPictureBox box in existingBoxes)
             {
-                if(IsRedBox(box))
+                if (playManager.IsRedBox(box))
                 {
                     box.Image = imlToolBox.Images[6];
                 }
-                else if(IsGreenBox(box))
+                else if (playManager.IsGreenBox(box))
                 {
                     box.Image = imlToolBox.Images[7];
                 }
@@ -63,12 +54,12 @@ namespace DKoQGame
             DeactivateAllBoxes();
             NewPictureBox selectedPictureBox = sender as NewPictureBox;
 
-            if (IsRedBox(selectedPictureBox) || IsGreenBox(selectedPictureBox))
+            if (playManager.IsRedBox(selectedPictureBox) || playManager.IsGreenBox(selectedPictureBox))
             {
                 currentSelectedBox = (NewPictureBox)sender;
                 selectedPictureBox.BringToFront();
 
-                selectedPictureBox.Image = IsRedBox(selectedPictureBox) ? imlToolBox.Images[8] : imlToolBox.Images[9];
+                selectedPictureBox.Image = playManager.IsRedBox(selectedPictureBox) ? imlToolBox.Images[8] : imlToolBox.Images[9];
             }
         }
 
@@ -115,8 +106,8 @@ namespace DKoQGame
                         Image = ToolBlocks[row, column] == 0 ? null : imlToolBox.Images[ToolBlocks[row, column]]
                     };
                     pictureBox.Click += new EventHandler(ActivateBox);
-                    if(IsRedBox(pictureBox) || IsGreenBox(pictureBox)) 
-                    { 
+                    if (playManager.IsRedBox(pictureBox) || playManager.IsGreenBox(pictureBox))
+                    {
                         existingBoxes.Add(pictureBox);
                     }
                     pnlGameboard.Controls.Add(pictureBox);
@@ -148,11 +139,79 @@ namespace DKoQGame
             }
         }
 
+        private void MoveBox(int targetRow, int targetColumn)
+        {
+            currentSelectedBox.Top += (targetRow - currentSelectedBox.Row) * (currentSelectedBox.Height + pictureBoxMargin);
+            currentSelectedBox.Left += (targetColumn - currentSelectedBox.Column) * (currentSelectedBox.Width + pictureBoxMargin);
+
+            currentSelectedBox.Row = targetRow;
+            currentSelectedBox.Column = targetColumn;
+
+            playManager.UpdateGameBoard(targetRow, targetColumn, currentSelectedBox.Tool);
+        }
+
+        private void MoveButtonHandler(string move)
+        {
+            if (!ButtonIsSelected())
+            {
+                MessageBox.Show("Please select a box.");
+            }
+            else
+            {
+                int currentRow = currentSelectedBox.Row;
+                int currentColumn = currentSelectedBox.Column;
+
+                int targetRow = currentRow;
+                int targetColumn = currentColumn;
+
+                switch (move)
+                {
+                    case "Up":
+                        targetRow--;
+                        break;
+                    case "Down":
+                        targetRow++;
+                        break;
+                    case "Left":
+                        targetColumn--;
+                        break;
+                    case "Right":
+                        targetColumn++;
+                        break;
+                    default:
+                        break;
+                }
+
+                //MessageBox.Show($"Go to [{targetRow}, {targetColumn}]: {playManager.GetToolFromPictureBox(targetRow, targetColumn)}");
+                if (playManager.IsValidMove(targetRow, targetColumn))
+                {
+                    if (playManager.GetToolFromPictureBox(targetRow, targetColumn) == 0)
+                    {
+                        MoveBox(targetRow, targetColumn);
+                    }
+                    else
+                    {
+                        if (playManager.IsCollided(currentSelectedBox, targetRow, targetColumn))
+                        {
+                            pnlGameboard.Controls.Remove(currentSelectedBox);
+                            existingBoxes.Remove(currentSelectedBox);
+                            currentSelectedBox.Dispose();
+                        }
+                    }
+                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
+                    CountTotalMoves();
+                    CountTotalBoxes();
+                }
+            }
+        }
+
         // =============================== Form Controls ===============================
 
         public frmPlay()
         {
             InitializeComponent();
+            this.KeyPreview = true;
         }
 
         private void frmPlay_Load(object sender, EventArgs e)
@@ -173,8 +232,8 @@ namespace DKoQGame
                 try
                 {
                     filePath = ofdOpen.FileName;
-                    
-                    string[] fileContent = File.ReadAllLines(filePath);                    
+
+                    string[] fileContent = File.ReadAllLines(filePath);
 
                     playManager.GetGameBoardInfoFromFile(fileContent);
                     CreateGameboard(playManager.Rows, playManager.Columns, playManager.Tools);
@@ -197,162 +256,42 @@ namespace DKoQGame
 
         private void btnUp_Click(object sender, EventArgs e)
         {
-            if (!ButtonIsSelected())
-            {
-                MessageBox.Show("Please select a box.");
-            }
-            else
-            {
-                int currentRow = currentSelectedBox.Row;
-                int currentColumn = currentSelectedBox.Column;
-
-                int currentRowUp = currentRow - 1;
-
-                MessageBox.Show($"Go to [{currentRowUp}, {currentColumn}]: {playManager.GetToolFromPictureBox(currentRowUp, currentColumn)}");
-                if (currentRowUp >= 0)
-                {
-                    if (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 0)    //When it's empty tile
-                    {
-                        currentSelectedBox.Top -= (currentSelectedBox.Height + pictureBoxMargin);
-
-                        currentSelectedBox.Row = currentRowUp;
-                        playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                    }
-                    else
-                    {
-                        if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowUp, currentColumn) == 3)))
-                        {
-                            pnlGameboard.Controls.Remove(currentSelectedBox);
-                            existingBoxes.Remove(currentSelectedBox);
-                            currentSelectedBox.Dispose();
-                        }
-                    }
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                    CountTotalMoves();
-                    CountTotalBoxes();
-                }
-            }
+            MoveButtonHandler("Up");
         }
 
         private void btnDown_Click(object sender, EventArgs e)
         {
-            if (!ButtonIsSelected())
-            {
-                MessageBox.Show("Please select a box.");
-            }
-            else
-            {
-                int currentRow = currentSelectedBox.Row;
-                int currentColumn = currentSelectedBox.Column;
-
-                int currentRowDown = currentRow + 1;
-
-                MessageBox.Show($"Go to [{currentRowDown}, {currentColumn}]: {playManager.GetToolFromPictureBox(currentRowDown, currentColumn)}");
-                if (currentRowDown <= playManager.Rows)
-                {
-                    if (playManager.GetToolFromPictureBox(currentRowDown, currentColumn) == 0)    //When it's empty tile
-                    {
-                        currentSelectedBox.Top += (currentSelectedBox.Height + pictureBoxMargin);
-
-                        currentSelectedBox.Row = currentRowDown;
-                        playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                    }
-                    else
-                    {
-                        if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowDown, currentColumn) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRowDown, currentColumn) == 3)))
-                        {
-                            pnlGameboard.Controls.Remove(currentSelectedBox);
-                            existingBoxes.Remove(currentSelectedBox);
-                            currentSelectedBox.Dispose();
-                        }
-                    }
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                    CountTotalMoves();
-                    CountTotalBoxes();
-                }
-            }   
+            MoveButtonHandler("Down");
         }
 
         private void btnLeft_Click(object sender, EventArgs e)
         {
-
-            if (!ButtonIsSelected())
-            {
-                MessageBox.Show("Please select a box.");
-            }
-            else
-            {
-                int currentRow = currentSelectedBox.Row;
-                int currentColumn = currentSelectedBox.Column;
-
-                int currentColumnLeft = currentColumn - 1;
-
-                MessageBox.Show($"Go to [{currentRow}, {currentColumnLeft}]: {playManager.GetToolFromPictureBox(currentRow, currentColumnLeft)}");
-                if (currentColumnLeft >= 0)
-                {
-                    if (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 0)    //When it's empty tile
-                    {
-                        currentSelectedBox.Left -= (currentSelectedBox.Width + pictureBoxMargin);
-
-                        currentSelectedBox.Column = currentColumnLeft;
-                        playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                    }
-                    else
-                    {
-                        if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnLeft) == 3)))
-                        {
-                            pnlGameboard.Controls.Remove(currentSelectedBox);
-                            existingBoxes.Remove(currentSelectedBox);
-                            currentSelectedBox.Dispose();
-                        }
-                    }
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                    CountTotalMoves();
-                    CountTotalBoxes();
-                }
-            }
+            MoveButtonHandler("Left");
         }
 
         private void btnRight_Click(object sender, EventArgs e)
         {
-            if (!ButtonIsSelected())
+            MoveButtonHandler("Right");
+        }
+
+        private void frmPlay_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
             {
-                MessageBox.Show("Please select a box.");
-            }
-            else
-            {
-                int currentRow = currentSelectedBox.Row;
-                int currentColumn = currentSelectedBox.Column;
-
-                int currentColumnRight = currentColumn + 1;
-
-                MessageBox.Show($"Go to [{currentRow}, {currentColumnRight}]: {playManager.GetToolFromPictureBox(currentRow, currentColumnRight)}");
-                if (currentColumnRight >= 0)
-                {
-                    if (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 0)    //When it's empty tile
-                    {
-                        currentSelectedBox.Left += (currentSelectedBox.Width + pictureBoxMargin);
-
-                        currentSelectedBox.Column = currentColumnRight;
-                        playManager.UpdateGameBoard(currentSelectedBox.Row, currentSelectedBox.Column, currentSelectedBox.Tool);
-                    }
-                    else
-                    {
-                        if ((IsRedBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 2)) || (IsGreenBox(currentSelectedBox) && (playManager.GetToolFromPictureBox(currentRow, currentColumnRight) == 3)))
-                        {
-                            pnlGameboard.Controls.Remove(currentSelectedBox);
-                            existingBoxes.Remove(currentSelectedBox);
-                            currentSelectedBox.Dispose();
-                        }
-                    }
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
-                    CountTotalMoves();
-                    CountTotalBoxes();
-                }
+                case Keys.Up:
+                    MoveButtonHandler("Up");
+                    break;
+                case Keys.Down:
+                    MoveButtonHandler("Down");
+                    break;
+                case Keys.Left:
+                    MoveButtonHandler("Left");
+                    break;
+                case Keys.Right:
+                    MoveButtonHandler("Right");
+                    break;
+                default:
+                    break;
             }
         }
     }

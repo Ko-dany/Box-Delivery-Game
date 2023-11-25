@@ -70,5 +70,27 @@ namespace DKoQGame
         {
             Tools[row, column] = tool;
         }
+
+        public bool IsRedBox(NewPictureBox box)
+        {
+            if (box.Tool == 4 || box.Tool == 6) { return true; }
+            return false;
+        }
+        public bool IsGreenBox(NewPictureBox box)
+        {
+            if (box.Tool == 5 || box.Tool == 7) { return true; }
+            return false;
+        }
+
+        public bool IsValidMove(int targetRow, int targetColumn)
+        {
+            return targetRow >= 0 && targetRow < Rows && targetColumn >= 0 && targetColumn < Columns;
+        }
+
+        public bool IsCollided(NewPictureBox currentSelectedBox, int targetRow, int targetColumn)
+        {
+            return (IsRedBox(currentSelectedBox) && (GetToolFromPictureBox(targetRow, targetColumn) == 2)) || ((IsGreenBox(currentSelectedBox)) && ((GetToolFromPictureBox(targetRow, targetColumn) == 3)));
+
+        }
     }
 }

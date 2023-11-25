@@ -207,6 +207,7 @@
             this.Name = "frmPlay";
             this.Text = "Play Form";
             this.Load += new System.EventHandler(this.frmPlay_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmPlay_KeyDown);
             this.mnuPlay.ResumeLayout(false);
             this.mnuPlay.PerformLayout();
             this.ResumeLayout(false);
