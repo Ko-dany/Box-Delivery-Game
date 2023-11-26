@@ -1,4 +1,11 @@
-﻿using GameDesign;
+﻿/*
+ * Program: PROG2370-SEC4 Game Programming
+ * Purpose: Assignment 3
+ * Revision History:
+ *      created by Dahyun Ko, Nov/26/2023
+ */
+
+using GameDesign;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,25 +37,34 @@ namespace DKoQGame
         private static int totalMoves;
 
         // =============================== Methods ===============================
-        public void DeactivateAllBoxes()
+
+        /***** Methods for selecting boxes *****/
+        
+        // Deactivate (Change the image of) the box if it was clicked
+        public void DeactivateClickedBox()
         {
-            currentSelectedBox = null;
             foreach (NewPictureBox box in existingBoxes)
             {
-                if (playManager.IsRedBox(box))
+                if(box == currentSelectedBox)
                 {
-                    box.Image = imlToolBox.Images[6];
-                }
-                else if (playManager.IsGreenBox(box))
-                {
-                    box.Image = imlToolBox.Images[7];
+                    if (playManager.IsRedBox(box))
+                    {
+                        box.Image = imlToolBox.Images[6];
+                    }
+                    else if (playManager.IsGreenBox(box))
+                    {
+                        box.Image = imlToolBox.Images[7];
+                    }
+                    currentSelectedBox = null;
                 }
             }
         }
 
-        private void ActivateBox(object sender, EventArgs e)
+        // Activate (Change the image of) the box if user clicks a box tile.
+        private void ActivateClickedBox(object sender, EventArgs e)
         {
-            DeactivateAllBoxes();
+            if (ButtonIsSelected()) { DeactivateClickedBox(); }
+
             NewPictureBox selectedPictureBox = sender as NewPictureBox;
 
             if (playManager.IsRedBox(selectedPictureBox) || playManager.IsGreenBox(selectedPictureBox))
@@ -59,18 +75,19 @@ namespace DKoQGame
                 selectedPictureBox.Image = playManager.IsRedBox(selectedPictureBox) ? imlToolBox.Images[8] : imlToolBox.Images[9];
             }
         }
-
         private bool ButtonIsSelected()
         {
             return (currentSelectedBox != null);
         }
+
+        /************************************************************/
+        /***** Methods for updating the numbers of total moves and total boxes *****/
 
         private void InitializeCounts()
         {
             totalMoves = 0;
             existingBoxes = new List<NewPictureBox>();
         }
-
         private void UpdateTotalMoves()
         {
             txtMoves.Text = totalMoves.ToString();
@@ -79,6 +96,10 @@ namespace DKoQGame
         {
             txtBoxes.Text = existingBoxes.Count.ToString();
         }
+
+        /************************************************************/
+        /***** Methods for grid on the form *****/
+
         private void CreateGameboard(int rows, int columns, int[,] ToolBlocks)
         {
             int pictureBoxWidth = (gridBoxWidth - pictureBoxMargin * columns) / columns;
@@ -101,7 +122,7 @@ namespace DKoQGame
                         SizeMode = PictureBoxSizeMode.StretchImage,
                         Image = ToolBlocks[row, column] == 0 ? null : imlToolBox.Images[ToolBlocks[row, column]]
                     };
-                    pictureBox.Click += new EventHandler(ActivateBox);
+                    pictureBox.Click += new EventHandler(ActivateClickedBox);
                     if (playManager.IsRedBox(pictureBox) || playManager.IsGreenBox(pictureBox))
                     {
                         existingBoxes.Add(pictureBox);
@@ -112,7 +133,6 @@ namespace DKoQGame
 
             ActivateMoveButtons();
         }
-
         private bool HasGrid()
         {
             existingPictureBoxes = new List<Control>();
@@ -127,7 +147,6 @@ namespace DKoQGame
 
             return existingPictureBoxes.Count > 0;
         }
-
         private void RemoveGrid()
         {
             foreach (Control pictureBox in existingPictureBoxes)
@@ -137,16 +156,31 @@ namespace DKoQGame
             }
         }
 
+        /************************************************************/
+        /***** Methods for initializing the game *****/
         private void ActivateMoveButtons()
         {
             btnUp.Enabled = btnDown.Enabled = btnLeft.Enabled = btnRight.Enabled = true;
         }
-
         private void DeactivateMoveButtons()
         {
             btnUp.Enabled = btnDown.Enabled = btnLeft.Enabled = btnRight.Enabled = false;
         }
+        private void InitializeGame()
+        {
+            if (HasGrid()) { RemoveGrid(); }
 
+            DeactivateMoveButtons();
+
+            InitializeCounts();
+            UpdateTotalMoves();
+            UpdateTotalBoxes();
+        }
+
+        /************************************************************/
+        /***** Methods for moving boxes *****/
+
+        // Change the display of the box position then update it on the gameboard.
         private void MoveBox(int targetRow, int targetColumn)
         {
             currentSelectedBox.Top += (targetRow - currentSelectedBox.Row) * (currentSelectedBox.Height + pictureBoxMargin);
@@ -155,14 +189,16 @@ namespace DKoQGame
             currentSelectedBox.Row = targetRow;
             currentSelectedBox.Column = targetColumn;
 
+            // Update the tool property of the tile box moved to.
             playManager.UpdateGameBoard(targetRow, targetColumn, currentSelectedBox.Tool);
         }
 
+        // Handles the moving box event when a move button is clicked.
         private void MoveButtonHandler(string move)
         {
             if (!ButtonIsSelected())
             {
-                MessageBox.Show("Please select a box.");
+                MessageBox.Show("Please select a box to move.");
             }
             else
             {
@@ -193,15 +229,19 @@ namespace DKoQGame
                 //MessageBox.Show($"Go to [{targetRow}, {targetColumn}]: {playManager.GetToolFromPictureBox(targetRow, targetColumn)}");
                 if (playManager.IsValidMove(targetRow, targetColumn))
                 {
+                    // If the target tile is empty, the box will move.
                     if (playManager.GetToolFromPictureBox(targetRow, targetColumn) == 0)
                     {
                         MoveBox(targetRow, targetColumn);
                         totalMoves += 1;
                     }
+                    // If the target tile is NOT empty
                     else
                     {
-                        if (playManager.IsCollided(currentSelectedBox, targetRow, targetColumn))
+                        // If the target tile is the same-colored door
+                        if (playManager.IsCollidedWithSameColorDoor(currentSelectedBox, targetRow, targetColumn))
                         {
+                            // Remove the currently selected box inforamtion from the form as well as box list.
                             pnlGameboard.Controls.Remove(currentSelectedBox);
                             existingBoxes.Remove(currentSelectedBox);
                             currentSelectedBox.Dispose();
@@ -211,11 +251,11 @@ namespace DKoQGame
                         }
                     }
                     playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-
                     UpdateTotalMoves();
                 }
             }
 
+            // If the number of total boxes <= 0, end the game.
             if(existingBoxes.Count <= 0)
             {
                 MessageBox.Show("Congratuations!\nGame End", "QGame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -223,23 +263,13 @@ namespace DKoQGame
             }
         }
 
-        private void InitializeGame()
-        {
-            if (HasGrid()) { RemoveGrid(); }
-            
-            DeactivateMoveButtons();
-
-            InitializeCounts();
-            UpdateTotalMoves();
-            UpdateTotalBoxes();
-        }
+        /************************************************************/
 
         // =============================== Form Controls ===============================
 
         public frmPlay()
         {
             InitializeComponent();
-
             InitializeGame();
         }
 
@@ -255,11 +285,9 @@ namespace DKoQGame
             DialogResult result = ofdOpen.ShowDialog();
             if (result == DialogResult.OK)
             {
-                string filePath = ofdOpen.Filter;
-
                 try
                 {
-                    filePath = ofdOpen.FileName;
+                    string filePath = ofdOpen.FileName;
 
                     string[] fileContent = File.ReadAllLines(filePath);
 
@@ -272,7 +300,7 @@ namespace DKoQGame
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Execption is happenning!:\n" + ex.Message);
+                    MessageBox.Show(ex.Message);
                 }
 
             }

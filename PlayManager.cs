@@ -91,7 +91,7 @@ namespace DKoQGame
             return targetRow >= 0 && targetRow < Rows && targetColumn >= 0 && targetColumn < Columns;
         }
 
-        public bool IsCollided(NewPictureBox currentSelectedBox, int targetRow, int targetColumn)
+        public bool IsCollidedWithSameColorDoor(NewPictureBox currentSelectedBox, int targetRow, int targetColumn)
         {
             return (IsRedBox(currentSelectedBox) && (GetToolFromPictureBox(targetRow, targetColumn) == 2)) || ((IsGreenBox(currentSelectedBox)) && ((GetToolFromPictureBox(targetRow, targetColumn) == 3)));
 
