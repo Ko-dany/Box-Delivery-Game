@@ -65,8 +65,8 @@ namespace GameDesign
                         case 3:
                             doors += 1;
                             break;
-                        case 4:
-                        case 5:
+                        case 6:
+                        case 7:
                             boxes += 1;
                             break;
                         default:
