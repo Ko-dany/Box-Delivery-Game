@@ -289,10 +289,6 @@ namespace DKoQGame
                     break;
                 case Keys.Right:
                     MoveButtonHandler("Right");
-                    break;
-                default:
-                    break;
-            }
         }
     }
 }
