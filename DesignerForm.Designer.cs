@@ -78,14 +78,14 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -97,8 +97,10 @@
             this.imlToolBox.Images.SetKeyName(1, "Wall.png");
             this.imlToolBox.Images.SetKeyName(2, "RedDoor.png");
             this.imlToolBox.Images.SetKeyName(3, "GreenDoor.png");
-            this.imlToolBox.Images.SetKeyName(4, "RedBox.png");
-            this.imlToolBox.Images.SetKeyName(5, "GreenBox.png");
+            this.imlToolBox.Images.SetKeyName(4, "None.png");
+            this.imlToolBox.Images.SetKeyName(5, "None.png");
+            this.imlToolBox.Images.SetKeyName(6, "RedBox.png");
+            this.imlToolBox.Images.SetKeyName(7, "GreenBox.png");
             // 
             // panel1
             // 
@@ -117,7 +119,7 @@
             // btnGreenBox
             // 
             this.btnGreenBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGreenBox.ImageIndex = 5;
+            this.btnGreenBox.ImageIndex = 7;
             this.btnGreenBox.ImageList = this.imlToolBox;
             this.btnGreenBox.Location = new System.Drawing.Point(47, 517);
             this.btnGreenBox.Margin = new System.Windows.Forms.Padding(4);
@@ -132,7 +134,7 @@
             // btnRedBox
             // 
             this.btnRedBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRedBox.ImageIndex = 4;
+            this.btnRedBox.ImageIndex = 6;
             this.btnRedBox.ImageList = this.imlToolBox;
             this.btnRedBox.Location = new System.Drawing.Point(47, 416);
             this.btnRedBox.Margin = new System.Windows.Forms.Padding(4);

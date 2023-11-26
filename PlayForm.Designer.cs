@@ -181,8 +181,8 @@
             this.imlToolBox.Images.SetKeyName(1, "Wall.png");
             this.imlToolBox.Images.SetKeyName(2, "RedDoor.png");
             this.imlToolBox.Images.SetKeyName(3, "GreenDoor.png");
-            this.imlToolBox.Images.SetKeyName(4, "RedBox.png");
-            this.imlToolBox.Images.SetKeyName(5, "GreenBox.png");
+            this.imlToolBox.Images.SetKeyName(4, "None.png");
+            this.imlToolBox.Images.SetKeyName(5, "None.png");
             this.imlToolBox.Images.SetKeyName(6, "RedBox.png");
             this.imlToolBox.Images.SetKeyName(7, "GreenBox.png");
             this.imlToolBox.Images.SetKeyName(8, "RedBox_Selected.png");
@@ -207,7 +207,6 @@
             this.Name = "frmPlay";
             this.Text = "Play Form";
             this.Load += new System.EventHandler(this.frmPlay_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmPlay_KeyDown);
             this.mnuPlay.ResumeLayout(false);
             this.mnuPlay.PerformLayout();
             this.ResumeLayout(false);

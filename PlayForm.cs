@@ -22,7 +22,6 @@ namespace DKoQGame
         private List<Control> existingPictureBoxes;
         private List<NewPictureBox> existingBoxes;
 
-        private int[,] GameBoard { get; set; }
         private int gridBoxWidth;
         private int gridBoxHeight;
         int pictureBoxMargin = 3;
@@ -31,8 +30,6 @@ namespace DKoQGame
         private static int totalMoves;
 
         // =============================== Methods ===============================
-
-
         public void DeactivateAllBoxes()
         {
             currentSelectedBox = null;
@@ -68,28 +65,27 @@ namespace DKoQGame
             return (currentSelectedBox != null);
         }
 
-        private void CountTotalMoves()
+        private void InitializeCounts()
         {
-            totalMoves += 1;
+            totalMoves = 0;
+            existingBoxes = new List<NewPictureBox>();
+        }
+
+        private void UpdateTotalMoves()
+        {
             txtMoves.Text = totalMoves.ToString();
         }
-        private void CountTotalBoxes()
+        private void UpdateTotalBoxes()
         {
             txtBoxes.Text = existingBoxes.Count.ToString();
         }
         private void CreateGameboard(int rows, int columns, int[,] ToolBlocks)
         {
-
-            if (HasGrid()) { RemoveGrid(); }
-
-
             int pictureBoxWidth = (gridBoxWidth - pictureBoxMargin * columns) / columns;
             int pictureBoxHeight = (gridBoxHeight - pictureBoxMargin * rows) / rows;
 
             int pictureBoxSize = Math.Min(pictureBoxWidth, pictureBoxHeight);
             pictureBoxSize = pictureBoxSize > 90 ? 90 : pictureBoxSize;
-
-            existingBoxes = new List<NewPictureBox>();
 
             for (int row = 0; row < rows; row++)
             {
@@ -113,6 +109,8 @@ namespace DKoQGame
                     pnlGameboard.Controls.Add(pictureBox);
                 }
             }
+
+            ActivateMoveButtons();
         }
 
         private bool HasGrid()
@@ -137,6 +135,16 @@ namespace DKoQGame
                 pnlGameboard.Controls.Remove(pictureBox);
                 pictureBox.Dispose();
             }
+        }
+
+        private void ActivateMoveButtons()
+        {
+            btnUp.Enabled = btnDown.Enabled = btnLeft.Enabled = btnRight.Enabled = true;
+        }
+
+        private void DeactivateMoveButtons()
+        {
+            btnUp.Enabled = btnDown.Enabled = btnLeft.Enabled = btnRight.Enabled = false;
         }
 
         private void MoveBox(int targetRow, int targetColumn)
@@ -188,6 +196,7 @@ namespace DKoQGame
                     if (playManager.GetToolFromPictureBox(targetRow, targetColumn) == 0)
                     {
                         MoveBox(targetRow, targetColumn);
+                        totalMoves += 1;
                     }
                     else
                     {
@@ -196,14 +205,33 @@ namespace DKoQGame
                             pnlGameboard.Controls.Remove(currentSelectedBox);
                             existingBoxes.Remove(currentSelectedBox);
                             currentSelectedBox.Dispose();
+
+                            totalMoves += 1;
+                            UpdateTotalBoxes();
                         }
                     }
                     playManager.UpdateGameBoard(currentRow, currentColumn, 0);
 
-                    CountTotalMoves();
-                    CountTotalBoxes();
+                    UpdateTotalMoves();
                 }
             }
+
+            if(existingBoxes.Count <= 0)
+            {
+                MessageBox.Show("Congratuations!\nGame End", "QGame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                InitializeGame();
+            }
+        }
+
+        private void InitializeGame()
+        {
+            if (HasGrid()) { RemoveGrid(); }
+            
+            DeactivateMoveButtons();
+
+            InitializeCounts();
+            UpdateTotalMoves();
+            UpdateTotalBoxes();
         }
 
         // =============================== Form Controls ===============================
@@ -211,7 +239,8 @@ namespace DKoQGame
         public frmPlay()
         {
             InitializeComponent();
-            this.KeyPreview = true;
+
+            InitializeGame();
         }
 
         private void frmPlay_Load(object sender, EventArgs e)
@@ -219,7 +248,6 @@ namespace DKoQGame
             playManager = new PlayManager();
             gridBoxWidth = pnlGameboard.Width;
             gridBoxHeight = pnlGameboard.Height;
-            totalMoves = 0;
         }
 
         private void openToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -236,6 +264,7 @@ namespace DKoQGame
                     string[] fileContent = File.ReadAllLines(filePath);
 
                     playManager.GetGameBoardInfoFromFile(fileContent);
+                    InitializeGame();
                     CreateGameboard(playManager.Rows, playManager.Columns, playManager.Tools);
 
                     txtBoxes.Text = (playManager.RedBoxes + playManager.GreenBoxes).ToString();
@@ -272,23 +301,6 @@ namespace DKoQGame
         private void btnRight_Click(object sender, EventArgs e)
         {
             MoveButtonHandler("Right");
-        }
-
-        private void frmPlay_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Up:
-                    MoveButtonHandler("Up");
-                    break;
-                case Keys.Down:
-                    MoveButtonHandler("Down");
-                    break;
-                case Keys.Left:
-                    MoveButtonHandler("Left");
-                    break;
-                case Keys.Right:
-                    MoveButtonHandler("Right");
         }
     }
 }

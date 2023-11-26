@@ -19,11 +19,16 @@ namespace DKoQGame
         public int GreenBoxes { get; set; } = 0;
         public int GreenDoors { get; set; } = 0;
 
+        public void InitializeGameBoard()
+        {
+            RedBoxes = RedDoors = GreenBoxes = GreenDoors = 0;
+        }
+
 
         // Conver txt file to int[,] data for the gameboard
         public void GetGameBoardInfoFromFile(string[] fileContent)
         {
-
+            InitializeGameBoard();
             Rows = int.Parse(fileContent[0]);
             Columns = int.Parse(fileContent[1]);
 
@@ -41,14 +46,12 @@ namespace DKoQGame
                         case 2:
                             RedDoors += 1;
                             break;
-                        case 4:
                         case 6:
                             RedBoxes += 1;
                             break;
                         case 3:
                             GreenDoors += 1;
                             break;
-                        case 5:
                         case 7:
                             GreenBoxes += 1;
                             break;
@@ -61,9 +64,10 @@ namespace DKoQGame
             // If the number of boxes and doors are not equivalent, throw an error.
         }
 
-        public int GetToolFromPictureBox(int row, int column)
+        public int? GetToolFromPictureBox(int row, int column)
         {
-            return Tools[row, column];
+            if (IsValidMove(row, column)) { return Tools[row, column]; }
+            else { return null;  }
         }
 
         public void UpdateGameBoard(int row, int column, int tool)
@@ -73,12 +77,12 @@ namespace DKoQGame
 
         public bool IsRedBox(NewPictureBox box)
         {
-            if (box.Tool == 4 || box.Tool == 6) { return true; }
+            if (box.Tool == 6) { return true; }
             return false;
         }
         public bool IsGreenBox(NewPictureBox box)
         {
-            if (box.Tool == 5 || box.Tool == 7) { return true; }
+            if (box.Tool == 7) { return true; }
             return false;
         }
 
