@@ -55,7 +55,7 @@
             this.openToolStripMenuItem});
             this.mnuPlay.Location = new System.Drawing.Point(0, 0);
             this.mnuPlay.Name = "mnuPlay";
-            this.mnuPlay.Size = new System.Drawing.Size(1357, 28);
+            this.mnuPlay.Size = new System.Drawing.Size(1357, 30);
             this.mnuPlay.TabIndex = 0;
             this.mnuPlay.Text = "menuStrip1";
             // 
@@ -134,7 +134,8 @@
             this.btnUp.Location = new System.Drawing.Point(1133, 563);
             this.btnUp.Name = "btnUp";
             this.btnUp.Size = new System.Drawing.Size(79, 72);
-            this.btnUp.TabIndex = 6;
+            this.btnUp.TabIndex = 0;
+            this.btnUp.TabStop = false;
             this.btnUp.Text = "Up";
             this.btnUp.UseVisualStyleBackColor = true;
             this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
@@ -144,7 +145,8 @@
             this.btnDown.Location = new System.Drawing.Point(1133, 659);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(79, 72);
-            this.btnDown.TabIndex = 7;
+            this.btnDown.TabIndex = 0;
+            this.btnDown.TabStop = false;
             this.btnDown.Text = "Down";
             this.btnDown.UseVisualStyleBackColor = true;
             this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
@@ -154,7 +156,8 @@
             this.btnLeft.Location = new System.Drawing.Point(1036, 659);
             this.btnLeft.Name = "btnLeft";
             this.btnLeft.Size = new System.Drawing.Size(79, 72);
-            this.btnLeft.TabIndex = 8;
+            this.btnLeft.TabIndex = 0;
+            this.btnLeft.TabStop = false;
             this.btnLeft.Text = "Left";
             this.btnLeft.UseVisualStyleBackColor = true;
             this.btnLeft.Click += new System.EventHandler(this.btnLeft_Click);
@@ -164,7 +167,8 @@
             this.btnRight.Location = new System.Drawing.Point(1229, 659);
             this.btnRight.Name = "btnRight";
             this.btnRight.Size = new System.Drawing.Size(79, 72);
-            this.btnRight.TabIndex = 9;
+            this.btnRight.TabIndex = 0;
+            this.btnRight.TabStop = false;
             this.btnRight.Text = "Right";
             this.btnRight.UseVisualStyleBackColor = true;
             this.btnRight.Click += new System.EventHandler(this.btnRight_Click);

@@ -35,6 +35,7 @@ namespace DKoQGame
 
         private NewPictureBox currentSelectedBox;
         private static int totalMoves;
+        private bool gameIsActivated;
 
         // =============================== Methods ===============================
 
@@ -132,6 +133,7 @@ namespace DKoQGame
             }
 
             ActivateMoveButtons();
+            gameIsActivated = true;
         }
         private bool HasGrid()
         {
@@ -175,6 +177,7 @@ namespace DKoQGame
             InitializeCounts();
             UpdateTotalMoves();
             UpdateTotalBoxes();
+            gameIsActivated = false;
         }
 
         /************************************************************/
@@ -256,7 +259,7 @@ namespace DKoQGame
             }
 
             // If the number of total boxes <= 0, end the game.
-            if(existingBoxes.Count <= 0)
+            if(existingBoxes.Count <= 0 && gameIsActivated)
             {
                 MessageBox.Show("Congratuations!\nGame End", "QGame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 InitializeGame();
