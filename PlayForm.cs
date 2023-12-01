@@ -5,6 +5,7 @@
  *      created by Dahyun Ko, Nov/26/2023
  */
 
+
 using GameDesign;
 using System;
 using System.Collections.Generic;
@@ -205,57 +206,66 @@ namespace DKoQGame
             }
             else
             {
-                int currentRow = currentSelectedBox.Row;
-                int currentColumn = currentSelectedBox.Column;
+                bool isValidMove = true;
 
-                int targetRow = currentRow;
-                int targetColumn = currentColumn;
-
-                switch (move)
+                do
                 {
-                    case "Up":
-                        targetRow--;
-                        break;
-                    case "Down":
-                        targetRow++;
-                        break;
-                    case "Left":
-                        targetColumn--;
-                        break;
-                    case "Right":
-                        targetColumn++;
-                        break;
-                    default:
-                        break;
-                }
+                    int currentRow = currentSelectedBox.Row;
+                    int currentColumn = currentSelectedBox.Column;
 
-                //MessageBox.Show($"Go to [{targetRow}, {targetColumn}]: {playManager.GetToolFromPictureBox(targetRow, targetColumn)}");
-                if (playManager.IsValidMove(targetRow, targetColumn))
-                {
-                    // If the target tile is empty, the box will move.
-                    if (playManager.GetToolFromPictureBox(targetRow, targetColumn) == 0)
+                    int targetRow = currentRow;
+                    int targetColumn = currentColumn;
+
+                    switch (move)
                     {
-                        MoveBox(targetRow, targetColumn);
-                        totalMoves += 1;
+                        case "Up":
+                            targetRow--;
+                            break;
+                        case "Down":
+                            targetRow++;
+                            break;
+                        case "Left":
+                            targetColumn--;
+                            break;
+                        case "Right":
+                            targetColumn++;
+                            break;
+                        default:
+                            break;
                     }
-                    // If the target tile is NOT empty
-                    else
+
+                    //MessageBox.Show($"Go to [{targetRow}, {targetColumn}]: {playManager.GetToolFromPictureBox(targetRow, targetColumn)}");
+                    if (playManager.IsValidMove(targetRow, targetColumn))
                     {
-                        // If the target tile is the same-colored door
-                        if (playManager.IsCollidedWithSameColorDoor(currentSelectedBox, targetRow, targetColumn))
+                        // If the target tile is empty, the box will move.
+                        if (playManager.GetToolFromPictureBox(targetRow, targetColumn) == 0)
                         {
-                            // Remove the currently selected box inforamtion from the form as well as box list.
-                            pnlGameboard.Controls.Remove(currentSelectedBox);
-                            existingBoxes.Remove(currentSelectedBox);
-                            currentSelectedBox.Dispose();
-
-                            totalMoves += 1;
-                            UpdateTotalBoxes();
+                            MoveBox(targetRow, targetColumn);
                         }
+                        // If the target tile is NOT empty
+                        else
+                        {
+                            // If the target tile is the same-colored door
+                            if (playManager.IsCollidedWithSameColorDoor(currentSelectedBox, targetRow, targetColumn))
+                            {
+                                // Remove the currently selected box inforamtion from the form as well as box list.
+                                pnlGameboard.Controls.Remove(currentSelectedBox);
+                                existingBoxes.Remove(currentSelectedBox);
+                                currentSelectedBox.Dispose();
+
+                            }
+                            else
+                            {
+                                isValidMove = false;
+                                totalMoves += 1;
+                                UpdateTotalMoves();
+                                UpdateTotalBoxes();
+
+                            }
+                        }
+                        playManager.UpdateGameBoard(currentRow, currentColumn, 0);
                     }
-                    playManager.UpdateGameBoard(currentRow, currentColumn, 0);
-                    UpdateTotalMoves();
-                }
+                } while (isValidMove);
             }
 
             // If the number of total boxes <= 0, end the game.

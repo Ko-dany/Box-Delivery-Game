@@ -88,7 +88,7 @@ namespace DKoQGame
 
         public bool IsValidMove(int targetRow, int targetColumn)
         {
-            return targetRow >= 0 && targetRow < Rows && targetColumn >= 0 && targetColumn < Columns;
+            return (targetRow >= 0 && targetRow < Rows && targetColumn >= 0 && targetColumn < Columns);
         }
 
         public bool IsCollidedWithSameColorDoor(NewPictureBox currentSelectedBox, int targetRow, int targetColumn)
