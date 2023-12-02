@@ -207,9 +207,11 @@ namespace DKoQGame
             else
             {
                 bool isValidMove = true;
+                bool isMoved = false;
 
                 do
                 {
+                    //MessageBox.Show("The loop starts!");
                     int currentRow = currentSelectedBox.Row;
                     int currentColumn = currentSelectedBox.Column;
 
@@ -241,6 +243,7 @@ namespace DKoQGame
                         if (playManager.GetToolFromPictureBox(targetRow, targetColumn) == 0)
                         {
                             MoveBox(targetRow, targetColumn);
+                            isMoved = true;
                         }
                         // If the target tile is NOT empty
                         else
@@ -252,15 +255,19 @@ namespace DKoQGame
                                 pnlGameboard.Controls.Remove(currentSelectedBox);
                                 existingBoxes.Remove(currentSelectedBox);
                                 currentSelectedBox.Dispose();
-
+                                isMoved = true;
+                                isValidMove = false;
                             }
                             else
                             {
                                 isValidMove = false;
+                            }
+
+                            if (isMoved)
+                            {
                                 totalMoves += 1;
                                 UpdateTotalMoves();
                                 UpdateTotalBoxes();
-
                             }
                         }
                         playManager.UpdateGameBoard(currentRow, currentColumn, 0);
