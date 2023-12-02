@@ -195,6 +195,9 @@ namespace DKoQGame
 
             // Update the tool property of the tile box moved to.
             playManager.UpdateGameBoard(targetRow, targetColumn, currentSelectedBox.Tool);
+
+            //MessageBox.Show($"FROM MOVEBOX: Updated [{targetRow}, {targetColumn}] with {currentSelectedBox.Tool} = {playManager.GetToolFromPictureBox(targetRow, targetColumn)}");
+
         }
 
         // Handles the moving box event when a move button is clicked.
@@ -236,13 +239,14 @@ namespace DKoQGame
                             break;
                     }
 
-                    //MessageBox.Show($"Go to [{targetRow}, {targetColumn}]: {playManager.GetToolFromPictureBox(targetRow, targetColumn)}");
+                    //MessageBox.Show($"FROM BUTTONHANDLER: Want to do to [{targetRow}, {targetColumn}]: {playManager.GetToolFromPictureBox(targetRow, targetColumn)}");
                     if (playManager.IsValidMove(targetRow, targetColumn))
                     {
                         // If the target tile is empty, the box will move.
                         if (playManager.GetToolFromPictureBox(targetRow, targetColumn) == 0)
                         {
                             MoveBox(targetRow, targetColumn);
+                            playManager.UpdateGameBoard(currentRow, currentColumn, 0);
                             isMoved = true;
                         }
                         // If the target tile is NOT empty
@@ -255,6 +259,8 @@ namespace DKoQGame
                                 pnlGameboard.Controls.Remove(currentSelectedBox);
                                 existingBoxes.Remove(currentSelectedBox);
                                 currentSelectedBox.Dispose();
+                                playManager.UpdateGameBoard(currentRow, currentColumn, 0);
+
                                 isMoved = true;
                                 isValidMove = false;
                             }
@@ -270,7 +276,6 @@ namespace DKoQGame
                                 UpdateTotalBoxes();
                             }
                         }
-                        playManager.UpdateGameBoard(currentRow, currentColumn, 0);
                     }
                 } while (isValidMove);
             }
@@ -349,6 +354,37 @@ namespace DKoQGame
         private void btnRight_Click(object sender, EventArgs e)
         {
             MoveButtonHandler("Right");
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            string msg = "";
+
+            int rows = playManager.Tools.GetLength(0);
+            int columns = playManager.Tools.GetLength(1);
+
+            for(int r=0; r<rows; r++)
+            {
+                for(int c=0; c<columns; c++)
+                {
+                    msg += playManager.Tools[r, c].ToString();
+                }
+                msg += "\n";
+            }
+
+            msg += "\n============================\n";
+
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < columns; c++)
+                {
+                    msg += playManager.GetToolFromPictureBox(r,c).ToString();
+                }
+                msg += "\n";
+            }
+
+            MessageBox.Show(msg);
+
         }
     }
 }

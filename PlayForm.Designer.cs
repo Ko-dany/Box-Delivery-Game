@@ -45,6 +45,7 @@
             this.btnRight = new System.Windows.Forms.Button();
             this.ofdOpen = new System.Windows.Forms.OpenFileDialog();
             this.imlToolBox = new System.Windows.Forms.ImageList(this.components);
+            this.btnTest = new System.Windows.Forms.Button();
             this.mnuPlay.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +56,7 @@
             this.openToolStripMenuItem});
             this.mnuPlay.Location = new System.Drawing.Point(0, 0);
             this.mnuPlay.Name = "mnuPlay";
-            this.mnuPlay.Size = new System.Drawing.Size(1357, 30);
+            this.mnuPlay.Size = new System.Drawing.Size(1357, 28);
             this.mnuPlay.TabIndex = 0;
             this.mnuPlay.Text = "menuStrip1";
             // 
@@ -192,11 +193,22 @@
             this.imlToolBox.Images.SetKeyName(8, "RedBox_Selected.png");
             this.imlToolBox.Images.SetKeyName(9, "GreenBox_Selected.png");
             // 
+            // btnTest
+            // 
+            this.btnTest.Location = new System.Drawing.Point(1036, 369);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(272, 77);
+            this.btnTest.TabIndex = 6;
+            this.btnTest.Text = "See Current Map";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
             // frmPlay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1357, 828);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnRight);
             this.Controls.Add(this.btnLeft);
             this.Controls.Add(this.btnDown);
@@ -235,5 +247,6 @@
         private System.Windows.Forms.Button btnRight;
         private System.Windows.Forms.OpenFileDialog ofdOpen;
         public System.Windows.Forms.ImageList imlToolBox;
+        private System.Windows.Forms.Button btnTest;
     }
 }

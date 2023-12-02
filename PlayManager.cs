@@ -73,6 +73,7 @@ namespace DKoQGame
         public void UpdateGameBoard(int row, int column, int tool)
         {
             Tools[row, column] = tool;
+            //MessageBox.Show($"Tools[{row}, {column}] = {tool}");
         }
 
         public bool IsRedBox(NewPictureBox box)
